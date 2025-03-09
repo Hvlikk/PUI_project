@@ -1,15 +1,18 @@
 # We will update this, dont worry 💅
 
 # Tech stack 🚀
+
 - [React 19] 
 - [Spring]
 - [MySQL] - with help of WAMPSERVER
 - [WampServer]
 
-
-# IMPORTNANT LINKS
+# Documentation 📝
 
 - https://politechnikawroclawska-my.sharepoint.com/:w:/g/personal/272874_student_pwr_edu_pl/ER3oso9_7shEtH59-tz0PAoBGCw_otajIzqhKJI97VrSMw?e=1kVVBY
+
+# Important links 🤠
+
 - https://www.w3schools.com/django/index.php
 - https://sqliteonline.com/
 - https://docs.djangoproject.com/en/5.1/intro/tutorial01/
