@@ -1,6 +1,10 @@
 # We will update this, dont worry 💅
 
-# TECH STACK
+# Tech stack 🚀
+- [React 19] 
+- [Spring]
+- [MySQL] - with help of WAMPSERVER
+- [WampServer]
 
 
 # IMPORTNANT LINKS
