@@ -1,4 +1,4 @@
-# We will update this, dont worry 💅
+# We will update this later
 
 # Tech stack 🚀
 
