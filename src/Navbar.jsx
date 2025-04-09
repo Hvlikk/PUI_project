@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './Navbar.css';
-import { FaHome, FaTrophy, FaStar, FaNewspaper, FaTv, FaInfoCircle, FaEnvelope, FaMoon, FaSun, FaFutbol } from 'react-icons/fa'; // Dodajemy FaFutbol
+import './Navbar.scss'; 
+import { FaHome, FaTrophy, FaStar, FaNewspaper, FaTv, FaInfoCircle, FaEnvelope, FaMoon, FaSun, FaFutbol } from 'react-icons/fa';
 
 function Navbar() {
   const [isDarkTheme, setIsDarkTheme] = useState(true);
@@ -13,7 +13,7 @@ function Navbar() {
   return (
     <nav className={`navbar ${isDarkTheme ? 'dark' : 'light'}`}>
       <div className="navbar-left">
-        <FaFutbol className="navbar-logo" /> {/* Używamy ikony zamiast zdjęcia */}
+        <FaFutbol className="navbar-logo" />
         <h1>ScoreTracker</h1>
       </div>
 
