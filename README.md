@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # React + Vite
 
 # We will update this later
@@ -12,7 +11,7 @@
 
 # Documentation 📝
 
-- https://politechnikawroclawska-my.sharepoint.com/:w:/g/personal/272874_student_pwr_edu_pl/ER3oso9_7shEtH59-tz0PAoBGCw_otajIzqhKJI97VrSMw?e=1kVVBY
+- [Dokumentacja](https://politechnikawroclawska-my.sharepoint.com/:w:/g/personal/272874_student_pwr_edu_pl/ER3oso9_7shEtH59-tz0PAoBGCw_otajIzqhKJI97VrSMw?e=1kVVBY)
 
 # Important links 🤠
 
