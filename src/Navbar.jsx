@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './Navbar.scss'; 
+import './Navbar.scss';
+import { Link } from 'react-router-dom'; // Używamy Link do nawigacji
 import { FaHome, FaTrophy, FaStar, FaNewspaper, FaTv, FaInfoCircle, FaEnvelope, FaMoon, FaSun, FaFutbol } from 'react-icons/fa';
 
 function Navbar() {
@@ -31,13 +32,13 @@ function Navbar() {
       </div>
 
       <div className="navbar-right">
-        <a href="#dashboard"><FaHome /> Dashboard</a>
-        <a href="#league"><FaTrophy /> League</a>
-        <a href="#favorites"><FaStar /> Favorites</a>
-        <a href="#news"><FaNewspaper /> News</a>
-        <a href="#live"><FaTv /> Live</a>
-        <a href="#about"><FaInfoCircle /> About</a>
-        <a href="#contact"><FaEnvelope /> Contact</a>
+        <Link to="/dashboard"><FaHome /> Dashboard</Link>
+        <Link to="/league"><FaTrophy /> League</Link>
+        <Link to="/favorites"><FaStar /> Favorites</Link>
+        <Link to="/news"><FaNewspaper /> News</Link>
+        <Link to="/live"><FaTv /> Live</Link>
+        <Link to="/about"><FaInfoCircle /> About</Link>
+        <Link to="/contact"><FaEnvelope /> Contact</Link>
       </div>
     </nav>
   );
