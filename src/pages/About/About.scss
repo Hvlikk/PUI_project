@@ -176,9 +176,9 @@ $gray: #888;
 .person.person2 {
     grid-row: 2;
     justify-self: end;
-    justify-content: center;
+    justify-content: end;
     border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;   
+    border-bottom-left-radius: 16px;
     padding-right: 32px;
 
     & .facts.right {
