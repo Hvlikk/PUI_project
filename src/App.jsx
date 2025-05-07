@@ -4,6 +4,7 @@ import './App.scss';
 import Navbar from './components/Navbar/Navbar';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Footer from './components/Footer/Footer'
+import Contact from './pages/Contact/Contact';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path='/contact' element={<Contact/>}/>
             {/* Dodaj tutaj inne ścieżki */}
           </Routes>
 

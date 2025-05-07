@@ -44,3 +44,23 @@
   padding: 0;
   height: 100%;
 }
+
+
+
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  /* możesz dodać padding, jak potrzebujesz */
+}
