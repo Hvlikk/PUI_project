@@ -1,0 +1,208 @@
+$dark-gradient-start: #1a3c34;
+$dark-gradient-end: #333;
+$light-gradient-start: #f5f5f5;
+$light-gradient-end: #d3e4cd;
+$hover-bg: #4CAF50;
+$gray: #888;
+
+
+.wrapper-about-us {
+    position: relative;
+    z-index: 0;
+    min-height: 100vh;
+    background-color: black;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 100%;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("src/assets/about_us_bck.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(2px);
+        transform: translateZ(0);
+        z-index: -1;
+    }
+}
+
+.story-container {
+    position: absolute;
+    top: 40%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    opacity: 0;
+    animation: fadeIn 1s forwards; /* Fade in całej sekcji */
+
+    .line {
+        display: flex;
+        align-items: center;
+        margin: 20px 0;
+        opacity: 0;
+        animation: lineIn 0.8s forwards; /* Animacja dla linii */
+
+        /* Opóźnienia dla każdej linii */
+        &:nth-of-type(1) {
+            animation-delay: 0.5s;
+        }
+        &:nth-of-type(3) {
+            animation-delay: 2.4s;
+        }
+        &:nth-of-type(5) {
+            animation-delay: 4.3s;
+        }
+        &:nth-of-type(7) {
+            animation-delay: 6.3s;
+        }
+    }
+
+    .connector {
+        width: 2px;
+        height: 30px;
+        background-color: white;
+        margin-left: 7px;
+        opacity: 0;
+        animation: connectorIn 0.8s forwards;
+
+        /* Opóźnienia dla każdego connectora */
+        &:nth-of-type(2) {
+            animation-delay: 1.3s;
+        }
+        &:nth-of-type(4) {
+            animation-delay: 3.2s;
+        }
+        &:nth-of-type(6) {
+            animation-delay: 5.1s;
+        }
+    }
+
+    .dot {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: white;
+        margin-right: 15px;
+        box-shadow: 1px 1px 7px #b4b4b4;
+    }
+
+    .text {
+        text-shadow: 1px 1px 6px rgb(158, 149, 149);
+        font-size: 2rem;
+        font-weight: 600;
+        margin-left: 15px;
+        line-height: 1.5;
+    }
+}
+
+/* Animacja fadeIn dla całej sekcji */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animacja dla linii (line) */
+@keyframes lineIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* Początkowe przesunięcie w dół */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Przemieszczanie do docelowej pozycji */
+    }
+}
+
+/* Animacja dla connectora */
+@keyframes connectorIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px); /* Początkowe przesunięcie w górę */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Przemieszczanie do docelowej pozycji */
+    }
+}
+
+.about-us-persons-container {
+    background-color: $dark-gradient-end;
+    color: #f5f5f5;
+    display: grid;
+    gap: 32px;
+    grid-template-rows: repeat(4, 1fr);
+    padding-top: 128px;
+    padding-bottom: 128px;
+}
+
+.person {
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+    background-color: #1e5044;
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
+
+.facts {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+
+.team-photo {
+    height: 400px;
+    width: 300px;
+}
+
+.person.person1 {
+    grid-row: 1;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    padding-left: 32px;
+
+}
+
+.person.person2 {
+    grid-row: 2;
+    justify-self: end;
+    justify-content: center;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;   
+    padding-right: 32px;
+
+    & .facts.right {
+        margin-right: 20px;
+        justify-content: flex-end;
+    }
+}
+
+.person.person3 {
+    padding-left: 32px;
+    grid-row: 3;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+.person.person4 {
+    grid-row: 4;
+    justify-self: end;
+    justify-content: end;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    padding-right: 32px;
+
+    & .facts {
+        margin-right: 20px;
+    }
+}
