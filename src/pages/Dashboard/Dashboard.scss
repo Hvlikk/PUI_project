@@ -1,10 +1,4 @@
 /* App.css */
-.App {
-    margin-top: 60px;
-    padding: 20px;
-    width: 100%;
-  }
-  
   .content {
     text-align: center;
   }
@@ -34,15 +28,9 @@
     width: 100%;  
 }
 
+
+.content {
+  width: 100%;
+}
+
   
-  @media (max-width: 1200px) {
-    .match-card {
-      flex: 1 1 calc(45% - 20px);  /* Karty mają 45% szerokości na mniejszych ekranach */
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .match-card {
-      flex: 1 1 100%;  /* Na bardzo małych ekranach karty zajmują całą szerokość */
-    }
-  }

@@ -1,0 +1,33 @@
+.content-wrapper {
+    margin-top: 36px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    & .col {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+
+        &.left {
+            padding: 1.1rem;
+            padding-left: 3rem;
+            padding-right: 2.5rem;
+            justify-content: flex-start;
+            align-items: flex-start;
+            text-align: justify;
+            background-color: #fcfcfc;
+            box-shadow: 2px 2px 15px #616161;
+
+            & p {
+                margin: 0;
+            }
+        }
+
+        & h1 {
+            font-size: 1.2rem;
+        }
+
+    }
+
+}

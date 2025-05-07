@@ -6,7 +6,10 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
+  min-height: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -18,6 +21,14 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
 a:hover {
   color: #535bf2;
 }
@@ -46,9 +57,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

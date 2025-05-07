@@ -1,0 +1,101 @@
+@use '../Matchcard/Matchcard.scss' as matchCard;
+
+.tabs-container {
+    margin: 20px;
+  }
+  
+  .tabs {
+    display: flex;
+
+  }
+  
+  .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    margin-right: 5px;
+    border-radius: 5px 5px 0 0;
+    border: none;
+    font-size: 16px;
+  }
+  
+  .tab.active {
+    background-color: #4CAF50;
+    color: white;
+    border-bottom: 2px solid #4CAF50;
+  }
+  
+  .tab-content {
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 8px rgb(182, 182, 182);
+    border-top: none;
+  }
+  
+  .tab-pane {
+    display: none;
+  }
+  
+  .tab-pane.active {
+    display: block;
+  }
+
+
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    & .cards-section {
+        display: grid;
+        justify-items: center;
+        max-width: 99%;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+        padding: 0 16px;
+
+        & .match-card {
+            width: 100%;
+            min-width: 220px;
+            max-width: 300px;
+        }
+
+    }
+}
+
+
+@media (max-width: 1496px) {
+    .wrapper .cards-section {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (max-width: 1350px) {
+    .wrapper .cards-section {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 1124px) {
+    .wrapper .cards-section {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 864px) {
+    .wrapper .cards-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .tab-content {
+        min-width: 297px;
+    }
+    .wrapper .cards-section {
+        grid-template-columns: 1fr;
+    }
+
+}
