@@ -1,0 +1,43 @@
+$dark-gradient-start: #1a3c34;
+$dark-gradient-end: #333;
+$light-gradient-start: #f5f5f5;
+$light-gradient-end: #d3e4cd;
+$hover-bg: #4CAF50;
+$gray: #888;
+
+// Mixin dla gradientu
+@mixin gradient($start, $end) {
+    background: linear-gradient(90deg, $start, $end);
+  }
+  
+
+.footer {
+    margin-top: 60px;
+    padding-bottom: 16px;
+    width: 100%;
+    height: auto;
+    background-color: $dark-gradient-start;
+    @include gradient($dark-gradient-start, $dark-gradient-end);
+    color: white;
+}
+
+.footer-wrapper {
+    display: flex;
+    width: 100%;
+
+    & .content-container {
+        padding-left: 36px;
+        margin-top: 40px;
+        width: 33%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        & p {
+            margin: 0;
+        }
+
+    }
+
+}
