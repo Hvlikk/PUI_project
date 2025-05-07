@@ -31,7 +31,7 @@ const DashboardTabs = () => {
       <div className="tab-content">
         {activeTab === 'live' && (
           <div className={`tab-pane ${activeTab === 'live' ? 'active' : ''}`}>
-            <div className="wrapper">
+            <div className="tab-wrapper">
                 <h3 class="tab-header">Live Matches</h3>
                 <div className="cards-section">
                     <Matchcard/>
@@ -47,7 +47,7 @@ const DashboardTabs = () => {
         )}
         {activeTab === 'favourite-players' && (
           <div className={`tab-pane ${activeTab === 'favourite-players' ? 'active' : ''}`}>
-            <div className="wrapper">
+            <div className="tab-wrapper">
                 <h3 class="tab-header">Favourite players</h3>
                 <div className="cards-section">
                     <Matchcard/>
@@ -59,7 +59,7 @@ const DashboardTabs = () => {
 
         {activeTab === 'favourite-teams' && (
           <div className={`tab-pane ${activeTab === 'favourite-teams' ? 'active' : ''}`}>
-            <div className="wrapper">
+            <div className="tab-wrapper">
                 <h3 class="tab-header">Favourite teams</h3>
                 <div className="cards-section">
                     <Matchcard/>
