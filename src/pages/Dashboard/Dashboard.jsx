@@ -1,6 +1,8 @@
 import React from 'react';
-import './Dashboard.css';
-import Matchcard from './Matchcard'; // Zakładamy, że masz komponent Matchcard
+import './Dashboard.scss';
+import Matchcard from '../../components/Matchcard/Matchcard'; // Zakładamy, że masz komponent Matchcard
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 
 function Dashboard() {
   return (

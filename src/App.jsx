@@ -1,21 +1,23 @@
-// src/App.jsx
 import React from 'react';
-import './App.css';
-import Navbar from './Navbar'; // Importujemy nasz komponent Navbar
-import Matchcard from './Matchcard';
-import Dashboard from './Dashboard';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.scss';
+import Navbar from './components/Navbar/Navbar';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 function App() {
   return (
-    <div className="App">
-      {/* Wyświetlamy nasz pasek nawigacyjny */}
-     <Navbar />      
-      <div className="content">
-       <h1>Witaj w ScoreTracker!</h1>
+    <Router>
+      <div className="App">
+        <Navbar />
+        <main className="app-content">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            {/* Dodaj tutaj inne ścieżki */}
+          </Routes>
+        </main>
       </div>
-      <Dashboard/>
-
-    </div>
+    </Router>
   );
 }
 

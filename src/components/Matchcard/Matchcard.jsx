@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Matchcard.css'; 
+import './Matchcard.scss'; 
 import { FaHome, FaTrophy, FaStar, FaNewspaper, FaTv, FaInfoCircle, FaEnvelope, FaMoon, FaSun, FaFutbol } from 'react-icons/fa'; // Dodajemy FaFutbol
 
 function Matchcard() {
