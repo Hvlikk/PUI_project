@@ -64,7 +64,7 @@ export default function LoginRegister() {
     <div className="login-section">
       <div className="login-wrapper">
         <div style={{ maxWidth: 400, margin: 'auto' }}>
-          <h2>{isRegistering ? 'Rejestracja' : 'Logowanie'}</h2>
+          <h2>{isRegistering ? 'Stwórz swoje konto!' : 'Masz konto? Zaloguj się!'}</h2>
           <form onSubmit={handleSubmit}>
             <label>
               Nazwa użytkownika:
@@ -78,8 +78,8 @@ export default function LoginRegister() {
                 onChange={handleChange}
               />
             </label>
-            <br />
             {isRegistering && (
+            <div className="form-group">
               <label>
                 Email:
                 <input
@@ -90,8 +90,8 @@ export default function LoginRegister() {
                   onChange={handleChange}
                 />
               </label>
-            )}
-            <br />
+            </div>
+          )}
             <label>
               Hasło:
               <input
@@ -104,7 +104,7 @@ export default function LoginRegister() {
               />
             </label>
             <br />
-            <button type="submit" disabled={loading}>
+            <button type="submit" disabled={loading} className='formbutton'>
               {loading
                 ? isRegistering
                   ? 'Rejestruję...'
@@ -115,7 +115,7 @@ export default function LoginRegister() {
             </button>
           </form>
           {message && <p>{message}</p>}
-          <button onClick={toggleForm}>
+          <button onClick={toggleForm} className='formbutton'>
             {isRegistering ? 'Masz konto? Zaloguj się' : 'Nie masz konta? Zarejestruj się'}
           </button>
         </div>

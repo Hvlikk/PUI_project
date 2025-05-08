@@ -1,11 +1,109 @@
+// LoginRegister.scss
+
+$dark-gradient-start: #1a3c34;
+$dark-gradient-end: #333;
+$light-gradient-start: #f5f5f5;
+$light-gradient-end: #d3e4cd;
+$hover-bg: #4CAF50;
+$gray: #888;
+
 .login-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, $dark-gradient-start, $dark-gradient-end);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .login-wrapper {
-    padding: 40px;
+  background: linear-gradient(135deg, $light-gradient-start, $light-gradient-end);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.3s ease-in-out;
+
+  h2 {
+    text-align: center;
+    color: $dark-gradient-start;
+    margin-bottom: 1.5rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 1rem;
+      color: $dark-gradient-start;
+      font-weight: bold;
+
+      input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid $gray;
+        border-radius: 8px;
+        margin-top: 0.25rem;
+        transition: border 0.3s;
+
+        &:focus {
+          outline: none;
+          border-color: $hover-bg;
+        }
+      }
+    }
+
+    button[type="submit"] {
+      background-color: $dark-gradient-start;
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $hover-bg;
+      }
+
+      &:disabled {
+        background-color: $gray;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  p {
+    margin-top: 1rem;
+    text-align: center;
+    color: $dark-gradient-start;
+    font-weight: 500;
+  }
+
+  > button {
+    background: none;
+    border: none;
+    color: $dark-gradient-start;
+    margin-top: 1rem;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $hover-bg;
+    }
+  }
 }
+
+.form-group {
+    margin-bottom: 1rem;
+  }
+
+  .formbutton {
+    margin: 16px;
+  }
