@@ -2,45 +2,48 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.scss';
 import Navbar from './components/Navbar/Navbar';
-import Dashboard from './pages/Dashboard/Dashboard';
 import Footer from './components/Footer/Footer';
-import Contact from './pages/Contact/Contact';
-import About from './pages/About/About';
 import LoginRegister from './pages/LoginRegister/LoginRegister';
-import NotFound from './pages/NotFound/NotFound';
+import PrivateRoute from './auth/PrivateRoute';
+import ProtectedRoutes from './auth/ProtectedRoutes';
+import { AuthProvider } from './auth/AuthContext';
 
 function App() {
   return (
     <Router>
-      <AppWithRouter />
+      <AuthProvider>
+          <AppWithRouter />
+      </AuthProvider>
     </Router>
   );
 }
 
 function AppWithRouter() {
-  const location = useLocation(); // Hook do pobrania aktualnej lokalizacji
-  const isUserPage = location.pathname === '/user'; // <-- to jest potrzebne
+  const location = useLocation();
+  const isUserPage = location.pathname === '/user';
 
   return (
     <div className="App">
-      {/* Warunek, który sprawdza, czy aktualna ścieżka to '/user' */}
-      {location.pathname !== '/user' && <Navbar />}
-        
+      {!isUserPage && <Navbar />}
+
       <main className={`app-content ${isUserPage ? 'no-navbar-padding' : ''}`}>
         <Routes>
-          <Route path='/user' element={<LoginRegister />} />
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/about" element={<About />} />
-          <Route path='/contact' element={<Contact />} />
-          {/* Dodaj inne ścieżki tutaj */}
-          {/* Strona 404 */}
-          <Route path="*" element={<NotFound />} />
+          {/* Publiczna trasa logowania/rejestracji */}
+          <Route path="/user" element={<LoginRegister />} />
+
+          {/* Wszystkie inne trasy wymagają logowania */}
+          <Route
+            path="*"
+            element={
+              <PrivateRoute>
+                <ProtectedRoutes />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </main>
-        
-      {/* Warunek, który sprawdza, czy aktualna ścieżka to '/user' */}
-      {location.pathname !== '/user' && <Footer />}
+
+      {!isUserPage && <Footer />}
     </div>
   );
 }
