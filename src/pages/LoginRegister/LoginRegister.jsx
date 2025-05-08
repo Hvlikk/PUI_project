@@ -64,6 +64,7 @@ export default function LoginRegister() {
     <div className="login-section">
       <div className="login-wrapper">
         <div style={{ maxWidth: 400, margin: 'auto' }}>
+          <h4>⚽ ScoreTracker - twój najlepszy asystent 🔥</h4>
           <h2>{isRegistering ? 'Stwórz swoje konto!' : 'Masz konto? Zaloguj się!'}</h2>
           <form onSubmit={handleSubmit}>
             <label>
@@ -103,7 +104,6 @@ export default function LoginRegister() {
                 onChange={handleChange}
               />
             </label>
-            <br />
             <button type="submit" disabled={loading} className='formbutton'>
               {loading
                 ? isRegistering
@@ -115,7 +115,7 @@ export default function LoginRegister() {
             </button>
           </form>
           {message && <p>{message}</p>}
-          <button onClick={toggleForm} className='formbutton'>
+          <button onClick={toggleForm} className='formbutton register-form-swap-button'>
             {isRegistering ? 'Masz konto? Zaloguj się' : 'Nie masz konta? Zarejestruj się'}
           </button>
         </div>
