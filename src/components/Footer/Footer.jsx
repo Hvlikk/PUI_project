@@ -22,10 +22,11 @@ const Footer = () => {
                     <div className="content-container middle">
                         <Link to="/contact" class="nav-link">Contact</Link>
                         <Link to="/tos" class="nav-link">TOS</Link>
-                        <Link to="/license" class="nav-link">License</Link>
+                        <Link to="/privacy-policy" class="nav-link">Privacy Policy</Link>
                     </div>
                    
                     <div className="content-container">
+                        <Link to="/license" class="nav-link">License</Link>
                         <Link to="/attributions" class="nav-link">Attributions</Link>
                         <Link to="/faq" class="nav-link">FAQ</Link>
                     </div>
