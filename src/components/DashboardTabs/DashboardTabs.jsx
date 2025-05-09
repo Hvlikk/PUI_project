@@ -27,31 +27,32 @@ const DashboardTabs = () => {
 
   return (
     <div className="tabs-container">
-      {/* Wybór ligi */}
-      <div className="league-selector">
-        <label htmlFor="league">All Leagues:</label>
-        <select
-          id="league"
-          value={selectedLeague}
-          onChange={(e) => setSelectedLeague(e.target.value)}
-        >
-          <option value="all">All Leagues</option>
-          {Array.isArray(leagues) && leagues.map((league) => (
-            <option key={league.id} value={league.id}>
-              {league.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Przyciski do statystyk i tabeli */}
-      <div className="league-buttons">
-        <button onClick={() => navigate(`/standings/${selectedLeague}`)}>
-          Standings
-        </button>
-        <button onClick={() => navigate(`/statistics/${selectedLeague}`)}>
-          Statistics
-        </button>
+      <div className="league-section">
+        {/* Wybór ligi */}
+        <div className="league-selector">
+          <label htmlFor="league">All Leagues:</label>
+          <select
+            id="league"
+            value={selectedLeague}
+            onChange={(e) => setSelectedLeague(e.target.value)}
+          >
+            <option value="all">All Leagues</option>
+            {Array.isArray(leagues) && leagues.map((league) => (
+              <option key={league.id} value={league.id}>
+                {league.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {/* Przyciski do statystyk i tabeli */}
+        <div className="league-buttons">
+          <button onClick={() => navigate(`/standings/${selectedLeague}`)}>
+            Standings
+          </button>
+          <button onClick={() => navigate(`/statistics/${selectedLeague}`)}>
+            Statistics
+          </button>
+        </div>
       </div>
 
       {/* Zakładki */}
@@ -83,6 +84,10 @@ const DashboardTabs = () => {
             <div className="tab-wrapper">
               <h3 className="tab-header">Live Matches</h3>
               <div className="cards-section">
+                <Matchcard />
+                <Matchcard />
+                <Matchcard />
+                <Matchcard />
                 <Matchcard />
                 <Matchcard />
                 <Matchcard />

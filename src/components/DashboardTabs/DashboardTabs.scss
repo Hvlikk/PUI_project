@@ -48,6 +48,11 @@
     flex-direction: column;
     justify-content: space-around;
 
+    & .tab-header{
+        align-items: flex-start;
+        
+    }
+
     & .cards-section {
         display: grid;
         justify-items: center;

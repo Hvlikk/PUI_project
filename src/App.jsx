@@ -9,6 +9,8 @@ import About from './pages/About/About';
 import StatisticsPage from './pages/StatisticsPage/StatisticsPage';
 import StandingsPage from './pages/StandingsPage/StandingsPage';
 import NotFound from './pages/NotFound/NotFound';
+import TermsOfService from './pages/TermsOfService/TermsOfService';
+import FAQ from './pages/FAQ/FAQ';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
             <Route path='/contact' element={<Contact/>}/>
             <Route path="/standings/:leagueId" element={<StandingsPage />} />
             <Route path="/statistics/:leagueId" element={<StatisticsPage />} />
+            <Route path="/tos" element={<TermsOfService/>}/>
+            <Route path="/faq" element={<FAQ/>}/>
             
             {/* Dodaj tutaj inne ścieżki */}
           </Routes>
