@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Matchcard from '../Matchcard/Matchcard';
 import './DashboardTabs.scss';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+
 
 const DashboardTabs = () => {
   const [activeTab, setActiveTab] = useState('live');
@@ -30,19 +32,24 @@ const DashboardTabs = () => {
       <div className="league-section">
         {/* Wybór ligi */}
         <div className="league-selector">
-          <label htmlFor="league">All Leagues:</label>
-          <select
-            id="league"
-            value={selectedLeague}
-            onChange={(e) => setSelectedLeague(e.target.value)}
-          >
-            <option value="all">All Leagues</option>
-            {Array.isArray(leagues) && leagues.map((league) => (
-              <option key={league.id} value={league.id}>
-                {league.name}
-              </option>
-            ))}
-          </select>
+          <FormControl fullWidth variant="outlined" size="small">
+            <InputLabel id="league-label">League</InputLabel>
+            <Select
+              labelId="league-label"
+              id="league"
+              value={selectedLeague}
+              label="League"
+              onChange={(e) => setSelectedLeague(e.target.value)}
+            >
+              <MenuItem value="all">All Leagues</MenuItem>
+              {Array.isArray(leagues) &&
+                leagues.map((league) => (
+                  <MenuItem key={league.id} value={league.id}>
+                    {league.name}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
         </div>
         {/* Przyciski do statystyk i tabeli */}
         <div className="league-buttons">
@@ -61,19 +68,19 @@ const DashboardTabs = () => {
           className={`tab ${activeTab === 'live' ? 'active' : ''}`}
           onClick={() => setActiveTab('live')}
         >
-          Live Matches
+        🔥 Live Matches
         </button>
         <button
           className={`tab ${activeTab === 'favourite-players' ? 'active' : ''}`}
           onClick={() => setActiveTab('favourite-players')}
         >
-          Favourite players
+        ⭐ Favourite players
         </button>
         <button
           className={`tab ${activeTab === 'favourite-teams' ? 'active' : ''}`}
           onClick={() => setActiveTab('favourite-teams')}
         >
-          Favourite teams
+        ⚽ Favourite teams
         </button>
       </div>
 
@@ -82,7 +89,6 @@ const DashboardTabs = () => {
         {activeTab === 'live' && (
           <div className="tab-pane active">
             <div className="tab-wrapper">
-              <h3 className="tab-header">Live Matches</h3>
               <div className="cards-section">
                 <Matchcard />
                 <Matchcard />
@@ -99,7 +105,6 @@ const DashboardTabs = () => {
         {activeTab === 'favourite-players' && (
           <div className="tab-pane active">
             <div className="tab-wrapper">
-              <h3 className="tab-header">Favourite Players</h3>
               <div className="cards-section">
                 <Matchcard />
                 <Matchcard />
@@ -111,7 +116,6 @@ const DashboardTabs = () => {
         {activeTab === 'favourite-teams' && (
           <div className="tab-pane active">
             <div className="tab-wrapper">
-              <h3 className="tab-header">Favourite Teams</h3>
               <div className="cards-section">
                 <Matchcard />
                 <Matchcard />
