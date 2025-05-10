@@ -14,6 +14,9 @@ import FAQ from './pages/FAQ/FAQ';
 import Attributions from './pages/Attributions/Attributions';
 import License from './pages/License/License';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
+import News from './pages/News/News';
+import Live from './pages/Live/Live';
+import Favorites from './pages/Favorites/Favorites';
 
 function App() {
   return (
@@ -30,9 +33,14 @@ function App() {
             <Route path="/standings/:leagueId" element={<StandingsPage />} />
             <Route path="/statistics/:leagueId" element={<StatisticsPage />} />
             <Route path="/tos" element={<TermsOfService/>}/>
+            <Route path="/faq" element={<FAQ/>}/>
             <Route path="/attributions" element={<Attributions/>}/>
             <Route path="/license" element={<License/>}/>
             <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+            <Route path="/news" element={<News/>}/>
+            <Route path="/live" element={<Live/>}/>
+            <Route path="/favorites" element={<Favorites/>}/>
+
 
             
             {/* Dodaj tutaj inne ścieżki */}

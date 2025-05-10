@@ -58,6 +58,16 @@ const DashboardTabs = () => {
     <div className="no-matches">Brak meczów do wyświetlenia</div>
   );
 
+  const renderNoFavouritesMessage = () => {
+    if (activeTab === 'favourite-players') {
+      return <div className="no-matches">Brak meczów ulubionych zawodników</div>;
+    }
+    if (activeTab === 'favourite-teams') {
+      return <div className="no-matches">Brak meczów ulubionych drużyn</div>;
+    }
+    return renderNoMatchesMessage();
+  };
+
   const renderMatchList = (matchList) => (
     <div className="tab-wrapper">
       <div className="cards-section">
@@ -70,7 +80,7 @@ const DashboardTabs = () => {
                 competitions={competitions}
               />
             ))
-          : renderNoMatchesMessage()}
+          : renderNoFavouritesMessage()}
       </div>
     </div>
   );
