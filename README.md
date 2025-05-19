@@ -9,6 +9,37 @@
 - [MySQL] - with help of WAMPSERVER
 - [WampServer]
 
+## 🔧 Główne zależności
+
+Projekt wykorzystuje następujące biblioteki:
+
+### Frontend
+- **React** `19.1.0`
+- **React DOM** `19.1.0`
+- **React Router DOM** `7.5.3`
+- **Lucide React** `0.487.0`
+- **React Icons** `5.5.0`
+- **MUI (Material UI)** `7.1.0`
+- **Emotion (CSS-in-JS)**  
+  - `@emotion/react` `11.14.0`  
+  - `@emotion/styled` `11.14.0`
+
+### Stylowanie
+- **Sass** `1.87.0`
+
+### Narzędzia programistyczne
+- **Vite** `6.3.5`  
+- **@vitejs/plugin-react-swc** `3.8.1`
+
+### ESLint i konfiguracja
+- **ESLint** `9.24.0`  
+- **@eslint/js**, **eslint-plugin-react-hooks**, **eslint-plugin-react-refresh**  
+- **globals** `15.15.0`
+
+### Typy
+- **@types/react** `19.1.0`  
+- **@types/react-dom** `19.1.1`
+
 # Documentation 📝
 
 - [Dokumentacja](https://politechnikawroclawska-my.sharepoint.com/:w:/g/personal/272874_student_pwr_edu_pl/ER3oso9_7shEtH59-tz0PAoBGCw_otajIzqhKJI97VrSMw?e=1kVVBY)
