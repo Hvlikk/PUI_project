@@ -3,6 +3,26 @@
     text-align: center;
   }
   
+.league-section {
+  display: flex;
+  margin-bottom: 32px;
+  justify-content: space-between;
+
+  & .league-selector {
+    margin-left: 16px;
+  }
+
+  & .league-buttons {
+    display: flex;
+    gap: 16px;
+  }
+}
+
+
+.top {
+  margin-left: 20px;
+}
+
   .dashboard {
     display: flex;
     flex-wrap: wrap;
