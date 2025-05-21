@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Navbar.scss';
-import { Link } from 'react-router-dom'; // Używamy Link do nawigacji
+import { Link } from 'react-router-dom';
 import { FaHome, FaTrophy, FaStar, FaNewspaper, FaTv, FaInfoCircle, FaEnvelope, FaMoon, FaSun, FaFutbol } from 'react-icons/fa';
+import { useTheme } from '../../ThemeContext';
+
 
 function Navbar() {
-  const [isDarkTheme, setIsDarkTheme] = useState(true);
-
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme);
-    document.body.classList.toggle('light-theme');
-  };
+  const { isDarkTheme, toggleTheme } = useTheme();
 
   return (
     <nav className={`navbar ${isDarkTheme ? 'dark' : 'light'}`}>
