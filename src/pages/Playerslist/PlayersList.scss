@@ -1,0 +1,45 @@
+.players-list {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .players-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .player-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    width: 200px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, background 0.3s;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-5px);
+    }
+  }
+}

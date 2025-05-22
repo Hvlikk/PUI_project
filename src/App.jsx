@@ -15,8 +15,13 @@ import Attributions from './pages/Attributions/Attributions';
 import License from './pages/License/License';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import News from './pages/News/News';
-import Live from './pages/Live/Live';
 import Favorites from './pages/Favorites/Favorites';
+import Games from './pages/Games/Games';
+import Players from './pages/Players/Players';
+import Teams from './pages/Teams/Teams';
+import Login from './pages/Login/Login';
+import PlayersList from './pages/Playerslist/PlayersList';
+
 
 function App() {
   return (
@@ -38,12 +43,13 @@ function App() {
             <Route path="/license" element={<License/>}/>
             <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
             <Route path="/news" element={<News/>}/>
-            <Route path="/live" element={<Live/>}/>
             <Route path="/favorites" element={<Favorites/>}/>
+            <Route path="/players" element={<PlayersList />} />
+            <Route path="/players/:id" element={<Players />} />
+            <Route path="/teams" element={<Teams />} />
+            <Route path="/games" element={<Games />} />
+            <Route path="/login" element={<Login />} />
 
-
-            
-            {/* Dodaj tutaj inne ścieżki */}
           </Routes>
 
         </main>

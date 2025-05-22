@@ -1,9 +1,21 @@
 import React from 'react';
 import './Navbar.scss';
 import { Link } from 'react-router-dom';
-import { FaHome, FaTrophy, FaStar, FaNewspaper, FaTv, FaInfoCircle, FaEnvelope, FaMoon, FaSun, FaFutbol } from 'react-icons/fa';
+import {
+  FaHome,
+  FaUsers,
+  FaShieldAlt,
+  FaStar,
+  FaGamepad,
+  FaInfoCircle,
+  FaEnvelope,
+  FaSignInAlt,
+  FaMoon,
+  FaSun,
+  FaFutbol,
+  FaNewspaper
+} from 'react-icons/fa';
 import { useTheme } from '../../ThemeContext';
-
 
 function Navbar() {
   const { isDarkTheme, toggleTheme } = useTheme();
@@ -30,12 +42,14 @@ function Navbar() {
 
       <div className="navbar-right">
         <Link to="/dashboard"><FaHome /> Dashboard</Link>
-        <Link to="/league"><FaTrophy /> League</Link>
+        <Link to="/players"><FaUsers /> Players</Link>
+        <Link to="/teams"><FaShieldAlt /> Teams</Link>
         <Link to="/favorites"><FaStar /> Favorites</Link>
+        <Link to="/games"><FaGamepad /> Games</Link>
         <Link to="/news"><FaNewspaper /> News</Link>
-        <Link to="/live"><FaTv /> Live</Link>
         <Link to="/about"><FaInfoCircle /> About</Link>
         <Link to="/contact"><FaEnvelope /> Contact</Link>
+        <Link to="/login"><FaSignInAlt /> Log-in</Link>
       </div>
     </nav>
   );
