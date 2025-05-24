@@ -5,11 +5,11 @@ $light-gradient-end: #d3e4cd;
 $hover-bg: #4CAF50;
 $gray: #888;
 
-.login-wrapper {
+.register-wrapper {
   max-width: 400px;
   margin: 6rem auto;
   padding: 2rem;
-  background: rgba(26, 60, 52, 0.9); // dark-gradient-start z lekka przezroczysty
+  background: linear-gradient(180deg, $dark-gradient-start, $dark-gradient-end);
   border-radius: 10px;
   color: #fff;
   font-family: 'system-ui', Avenir, Helvetica, Arial, sans-serif;
@@ -24,7 +24,14 @@ $gray: #888;
     font-weight: 700;
   }
 
-  form {
+  .error-text {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin: 0 0 1rem 0;
+    text-align: center;
+  }
+
+  form.register-form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -36,27 +43,16 @@ $gray: #888;
       font-size: 1rem;
       font-family: inherit;
       outline: none;
-      background: #264d42; // trochę jaśniejszy niż dark-gradient-start
+      background: #264d42; // jaśniejszy niż dark-gradient-start
       color: #fff;
       transition: background 0.3s ease, color 0.3s ease;
 
       &:focus {
         background: #2e6d56;
       }
-    }
 
-    .forgot-password {
-      font-size: 0.9rem;
-      color: $hover-bg;
-      text-decoration: none;
-      align-self: flex-end;
-      margin-top: -0.5rem;
-      margin-bottom: 1rem;
-      font-weight: 600;
-
-      &:hover {
-        text-decoration: underline;
-        cursor: pointer;
+      &.input-error {
+        border: 2px solid #e74c3c;
       }
     }
 
@@ -71,30 +67,20 @@ $gray: #888;
       cursor: pointer;
       transition: background-color 0.3s ease;
 
-      &:hover {
+      &:hover:not(:disabled) {
         background-color: darken($hover-bg, 10%);
       }
-    }
-  }
 
-  p {
-    text-align: center;
-    margin-top: 1rem;
-
-    a {
-      color: $hover-bg;
-      text-decoration: none;
-      font-weight: 600;
-
-      &:hover {
-        text-decoration: underline;
+      &:disabled {
+        background-color: $gray;
+        cursor: not-allowed;
       }
     }
   }
 
-    .error-popup {
+  .error-popup {
     position: fixed;
-    top: 80px;  // pod navbar o wysokości 60px
+    top: 80px; // pod navbar 60px + 20px margin
     left: 50%;
     transform: translateX(-50%);
     background-color: rgba(255, 80, 80, 0.9);
@@ -109,25 +95,25 @@ $gray: #888;
     pointer-events: none;
 
     &.visible {
-        opacity: 1;
-        pointer-events: auto;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     &.hidden {
-        opacity: 0;
-        pointer-events: none;
+      opacity: 0;
+      pointer-events: none;
     }
-    }
+  }
 }
 
 /* Light theme */
 body.light-theme {
-  .login-wrapper {
+  .register-wrapper {
     background: linear-gradient(90deg, $light-gradient-start, $light-gradient-end);
     color: #222;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-    form {
+    form.register-form {
       input {
         background: #fff;
         color: #222;
@@ -138,13 +124,9 @@ body.light-theme {
           border-color: $hover-bg;
           outline: none;
         }
-      }
 
-      .forgot-password {
-        color: $hover-bg;
-
-        &:hover {
-          text-decoration: underline;
+        &.input-error {
+          border-color: #e74c3c;
         }
       }
 
@@ -152,22 +134,53 @@ body.light-theme {
         background-color: $hover-bg;
         color: white;
 
-        &:hover {
+        &:hover:not(:disabled) {
           background-color: darken($hover-bg, 10%);
+        }
+
+        &:disabled {
+          background-color: $gray;
+          cursor: not-allowed;
         }
       }
     }
 
-    p {
-      a {
-        color: darken($hover-bg, 10%);
-      }
+    .error-text {
+      color: #e74c3c;
     }
 
     .error-popup {
       background: #e74c3c;
       color: white;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.redirect-login {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: lighten(#fff, 40%);
+
+  a {
+    color: $hover-bg;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* W wersji light-theme */
+body.light-theme {
+  .redirect-login {
+    color: #555;
+
+    a {
+      color: darken($hover-bg, 10%);
     }
   }
 }

@@ -21,6 +21,7 @@ import Players from './pages/Players/Players';
 import Teams from './pages/Teams/Teams';
 import Login from './pages/Login/Login';
 import PlayersList from './pages/Playerslist/PlayersList';
+import Register from './pages/Register/Register'
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
             <Route path="/teams" element={<Teams />} />
             <Route path="/games" element={<Games />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
           </Routes>
 
