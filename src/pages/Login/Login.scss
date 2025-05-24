@@ -1,7 +1,5 @@
 $dark-gradient-start: #1a3c34;
 $dark-gradient-end: #333;
-$light-gradient-start: #f5f5f5;
-$light-gradient-end: #d3e4cd;
 $hover-bg: #4CAF50;
 $gray: #888;
 
@@ -9,7 +7,7 @@ $gray: #888;
   max-width: 400px;
   margin: 6rem auto;
   padding: 2rem;
-  background: rgba(26, 60, 52, 0.9); // dark-gradient-start z lekka przezroczysty
+  background: rgba(26, 60, 52, 0.9);
   border-radius: 10px;
   color: #fff;
   font-family: 'system-ui', Avenir, Helvetica, Arial, sans-serif;
@@ -20,71 +18,32 @@ $gray: #888;
   h2 {
     text-align: center;
     margin-bottom: 1.5rem;
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-weight: 700;
   }
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  .forgot-password {
+    font-size: 0.9rem;
+    color: $hover-bg;
+    text-decoration: none;
+    display: block;
+    text-align: right;
+    margin-bottom: 1rem;
+    font-weight: 600;
 
-    input {
-      padding: 0.75rem 1rem;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-family: inherit;
-      outline: none;
-      background: #264d42; // trochę jaśniejszy niż dark-gradient-start
-      color: #fff;
-      transition: background 0.3s ease, color 0.3s ease;
-
-      &:focus {
-        background: #2e6d56;
-      }
-    }
-
-    .forgot-password {
-      font-size: 0.9rem;
-      color: $hover-bg;
-      text-decoration: none;
-      align-self: flex-end;
-      margin-top: -0.5rem;
-      margin-bottom: 1rem;
-      font-weight: 600;
-
-      &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-      }
-    }
-
-    button {
-      background-color: $hover-bg;
-      color: white;
-      border: none;
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 1rem;
+    &:hover {
+      text-decoration: underline;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: darken($hover-bg, 10%);
-      }
     }
   }
 
-  p {
+  .register-text {
     text-align: center;
     margin-top: 1rem;
 
     a {
       color: $hover-bg;
-      text-decoration: none;
       font-weight: 600;
+      text-decoration: none;
 
       &:hover {
         text-decoration: underline;
@@ -92,9 +51,9 @@ $gray: #888;
     }
   }
 
-    .error-popup {
+  .error-popup {
     position: fixed;
-    top: 80px;  // pod navbar o wysokości 60px
+    top: 80px;
     left: 50%;
     transform: translateX(-50%);
     background-color: rgba(255, 80, 80, 0.9);
@@ -109,56 +68,29 @@ $gray: #888;
     pointer-events: none;
 
     &.visible {
-        opacity: 1;
-        pointer-events: auto;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     &.hidden {
-        opacity: 0;
-        pointer-events: none;
+      opacity: 0;
+      pointer-events: none;
     }
-    }
+  }
 }
 
 /* Light theme */
 body.light-theme {
   .login-wrapper {
-    background: linear-gradient(90deg, $light-gradient-start, $light-gradient-end);
+    background: linear-gradient(90deg, #f5f5f5, #d3e4cd);
     color: #222;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-    form {
-      input {
-        background: #fff;
-        color: #222;
-        border: 1px solid #ccc;
-
-        &:focus {
-          background: #fff;
-          border-color: $hover-bg;
-          outline: none;
-        }
-      }
-
-      .forgot-password {
-        color: $hover-bg;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-
-      button {
-        background-color: $hover-bg;
-        color: white;
-
-        &:hover {
-          background-color: darken($hover-bg, 10%);
-        }
-      }
+    .forgot-password {
+      color: $hover-bg;
     }
 
-    p {
+    .register-text {
       a {
         color: darken($hover-bg, 10%);
       }
@@ -166,7 +98,6 @@ body.light-theme {
 
     .error-popup {
       background: #e74c3c;
-      color: white;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
   }
