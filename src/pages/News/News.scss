@@ -29,6 +29,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: background 0.3s ease;
     line-height: 1.6;
+    overflow: hidden;
 
     .date {
       font-size: 0.85rem;
@@ -46,6 +47,7 @@
     p {
       font-size: 1rem;
       margin-bottom: 1rem;
+      transition: max-height 0.3s ease;
     }
 
     button {
@@ -61,6 +63,10 @@
       &:hover {
         background-color: #4b53d3;
       }
+    }
+
+    &.expanded {
+      background: rgba(255, 255, 255, 0.08);
     }
   }
 }

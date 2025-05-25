@@ -2,28 +2,27 @@ import React, { useState, useEffect } from 'react';
 import './News.scss';
 import { FaFutbol } from 'react-icons/fa';
 
-// Fallback dane – tymczasowe lokalne artykuły
 const fallbackData = [
   {
     id: 1,
     date: '2025-05-22',
-    title: 'Nowa funkcjonalność: tryb ciemny!',
-    excerpt: 'Wprowadziliśmy nowy tryb ciemny dla wygody użytkowników...',
-    content: 'W nowej wersji ScoreTracker dodaliśmy możliwość zmiany motywu na ciemny i jasny. Funkcjonalność ta działa globalnie i zapamiętuje preferencje użytkownika.'
+    title: 'New Feature: Dark Mode!',
+    excerpt: 'We’ve introduced a new dark mode for user comfort...',
+    content: 'In the new version of ScoreTracker, we’ve added the ability to switch between light and dark themes. This works globally and remembers user preferences. In the new version of ScoreTracker, we’ve added the ability to switch between light and dark themes. This works globally and remembers user preferences. In the new version of ScoreTracker, we’ve added the ability to switch between light and dark themes. This works globally and remembers user preferences.'
   },
   {
     id: 2,
     date: '2025-05-20',
-    title: 'Nowości w sekcji „Games”',
-    excerpt: 'Sekcja „Games” została rozbudowana o nowe funkcje śledzenia meczów...',
-    content: 'Od teraz użytkownicy mogą śledzić mecze w czasie rzeczywistym, z dostępem do statystyk, komentarzy i zmian na boisku.'
+    title: 'Updates in the "Games" Section',
+    excerpt: 'The "Games" section has been expanded with new match tracking features...',
+    content: 'Users can now follow live matches with access to real-time stats, commentary, and substitutions.'
   },
   {
     id: 3,
     date: '2025-05-18',
-    title: 'Aktualizacja ligi i tabel',
-    excerpt: 'Zaktualizowaliśmy dane ligowe oraz tabele punktowe...',
-    content: 'Nasza aplikacja uwzględnia teraz wyniki najnowszych kolejek ligowych w Europie oraz aktualne pozycje drużyn.'
+    title: 'League and Table Update',
+    excerpt: 'We’ve updated league data and point tables...',
+    content: 'Our app now reflects the latest European league results and current team standings.'
   },
 ];
 
@@ -31,15 +30,7 @@ const News = () => {
   const [articles, setArticles] = useState([]);
   const [expandedId, setExpandedId] = useState(null);
 
-  // Pobieranie z API (tu tylko udajemy, że coś pobieramy)
   useEffect(() => {
-    // Tu możesz podmienić URL na swoje API w przyszłości
-    // fetch('/api/news')
-    //   .then(res => res.json())
-    //   .then(data => setArticles(data))
-    //   .catch(() => setArticles(fallbackData));
-
-    // Tymczasowo używamy fallbacku
     setArticles(fallbackData);
   }, []);
 
@@ -49,12 +40,12 @@ const News = () => {
 
   return (
     <div className="news-wrapper">
-      <h2><FaFutbol /> Najnowsze informacje</h2>
+      <h2><FaFutbol /> Latest News</h2>
       {articles.map((article) => (
-        <div key={article.id} className="news-article">
+        <div key={article.id} className={`news-article ${expandedId === article.id ? 'expanded' : ''}`}>
           <p className="date">{article.date}</p>
           <h3>{article.title}</h3>
-          <p>{expandedId === article.id ? article.content : article.excerpt}</p>
+          <p className="content">{expandedId === article.id ? article.content : article.excerpt}</p>
           <button onClick={() => toggleReadMore(article.id)}>
             {expandedId === article.id ? 'Show Less' : 'Read More'}
           </button>
