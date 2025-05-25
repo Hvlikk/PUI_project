@@ -15,6 +15,24 @@
     justify-content: center;
   }
 
+  .search-input {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 2rem auto;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #007bff;
+  }
+}
+
+
   .player-card {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;

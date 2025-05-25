@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './PlayersList.scss';
 
@@ -21,16 +21,33 @@ const players = [
 ];
 
 const PlayersList = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredPlayers = players.filter(player =>
+    player.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="players-list">
       <h2>Zawodnicy</h2>
+      <input
+        type="text"
+        placeholder="Wyszukaj zawodnika..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-input"
+      />
       <div className="players-grid">
-        {players.map((player) => (
-          <Link to={`/players/${player.id}`} key={player.id} className="player-card">
-            <img src={player.photo} alt={player.name} />
-            <h3>{player.name}</h3>
-          </Link>
-        ))}
+        {filteredPlayers.length > 0 ? (
+          filteredPlayers.map(player => (
+            <Link to={`/players/${player.id}`} key={player.id} className="player-card">
+              <img src={player.photo} alt={player.name} />
+              <h3>{player.name}</h3>
+            </Link>
+          ))
+        ) : (
+          <p>Brak zawodników spełniających kryteria wyszukiwania.</p>
+        )}
       </div>
     </div>
   );

@@ -34,34 +34,32 @@
         width: 50%;
 
 
-        /*LEWA KOLUMNA*/
         &.left {
-            position: relative;
-            top: 10px;
-            width: 35%;
-            padding: 1.1rem;
-            padding-left: 3rem;
-            padding-right: 5rem;
-            justify-content: flex-start;
-            align-items: flex-start;
-            text-align: justify;
-            background-color: #fcfcfc;
-            box-shadow: 2px 2px 15px #616161;
-            height: auto;
-            border-top-right-radius: 16px;
-            border-bottom-right-radius: 16px;
+    position: relative;
+    top: 10px;
+    width: 35%;
+    padding: 1.1rem;
+    padding-left: 3rem;
+    padding-right: 5rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: justify;
+    background: linear-gradient(135deg, #a0a0a0 0%, #707070 100%);
+    box-shadow: 2px 2px 15px #616161;
+    height: auto;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
 
-            &.left:hover {
-                transform: translateX(-5px);
-                transition: ease 0.7s;
-            }
+    &.left:hover {
+        transform: translateX(-5px);
+        transition: ease 0.7s;
+    }
 
-            & p {
-                margin: 0;
-            }
+    & p {
+        margin: 0;
+    }
+}
 
-            
-        }
         
         & h1 {
             font-size: 1.2rem;
