@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './Players.scss';
 
+// Dane zapasowe
 const fallbackData = {
   1: {
     name: 'Robert Lewandowski',
@@ -10,7 +11,7 @@ const fallbackData = {
     dateOfBirth: '1988-08-21',
     team: 'FC Barcelona',
     shirtNumber: 9,
-    position: 'Forward'
+    position: 'Forward',
   },
   2: {
     name: 'Kylian Mbappé',
@@ -19,40 +20,51 @@ const fallbackData = {
     dateOfBirth: '1998-12-20',
     team: 'Paris Saint-Germain',
     shirtNumber: 7,
-    position: 'Forward'
-  }
+    position: 'Forward',
+  },
 };
 
 const Players = () => {
   const { id } = useParams();
   const [player, setPlayer] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    // Replace with your real API call later
     const fetchPlayer = async () => {
       try {
-        // const response = await fetch(`https://your-api/players/${id}`);
-        // const data = await response.json();
-        // setPlayer(data);
-        
-        // TEMP fallback:
-        setPlayer(fallbackData[id] || null);
+        const res = await fetch(`http://localhost:8081/api/players/${id}`);
+        if (!res.ok) throw new Error(`API returned status ${res.status}`);
+        const data = await res.json();
+        setPlayer(data);
       } catch (err) {
-        console.error('Error fetching player data:', err);
+        console.warn('API error – fallback used:', err.message);
+        setError('Could not load player from API. Showing fallback data.');
+        setPlayer(fallbackData[id] || null);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchPlayer();
   }, [id]);
 
-  if (!player) return <p style={{ textAlign: 'center' }}>Loading player data...</p>;
+  if (loading) return <p style={{ textAlign: 'center' }}>Loading player data...</p>;
+  if (!player) return <p style={{ textAlign: 'center', color: '#c00' }}>Player not found.</p>;
 
   return (
     <div className="player-profile">
+      {error && (
+        <div className="error-message" style={{ color: '#c00', textAlign: 'center', marginBottom: '1rem' }}>
+          {error}
+        </div>
+      )}
+
       <div className="player-header">
         <img src={player.photo} alt={player.name} className="player-photo" />
         <h2>{player.name}</h2>
       </div>
+
       <div className="player-details">
         <p><strong>Nationality:</strong> {player.nationality}</p>
         <p><strong>Date of Birth:</strong> {player.dateOfBirth}</p>

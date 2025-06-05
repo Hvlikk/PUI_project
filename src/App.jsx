@@ -21,6 +21,7 @@ import Players from './pages/Players/Players';
 import Teams from './pages/Teams/Teams';
 import Login from './pages/Login/Login';
 import PlayersList from './pages/Playerslist/PlayersList';
+import TeamsList from './pages/TeamList/TeamsList';
 import Register from './pages/Register/Register'
 
 
@@ -47,7 +48,8 @@ function App() {
             <Route path="/favorites" element={<Favorites/>}/>
             <Route path="/players" element={<PlayersList />} />
             <Route path="/players/:id" element={<Players />} />
-            <Route path="/teams" element={<Teams />} />
+            <Route path="/teams/:id" element={<Teams />} />
+            <Route path="/teams" element={<TeamsList />} />
             <Route path="/games" element={<Games />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

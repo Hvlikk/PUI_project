@@ -1,0 +1,44 @@
+.team-profile {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: inherit;
+  transition: background 0.3s ease;
+
+  .team-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    .team-logo {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+      background: white;
+      padding: 0.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 8px #646cff;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 2rem;
+    }
+  }
+
+  .team-details {
+    font-size: 1.1rem;
+    line-height: 1.8;
+
+    p {
+      margin-bottom: 0.8rem;
+
+      strong {
+        color: #646cff;
+      }
+    }
+  }
+}
