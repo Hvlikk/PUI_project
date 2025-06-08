@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PlayerCard from '../../components/PlayerCard/PlayerCard';
+import { useNavigate } from 'react-router-dom';
 import './PlayersList.scss';
 
 const fallbackImage = 'https://via.placeholder.com/300x300.png?text=No+Image';
@@ -8,7 +8,8 @@ const PlayersList = () => {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // 🔍 Nowy stan
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -32,10 +33,18 @@ const PlayersList = () => {
           position: 'Unknown',
           imageUrl: fallbackImage,
           isFavorite: false,
+          imageLoaded: false,
         }));
 
         setPlayers(mappedPlayers);
         setError('');
+
+        // Symulacja załadowania obrazków po 1 sekundzie
+        setTimeout(() => {
+          setPlayers((prev) =>
+            prev.map((player) => ({ ...player, imageLoaded: true }))
+          );
+        }, 1000);
       } catch (err) {
         console.error('Failed to fetch players:', err);
         setError('Nie udało się pobrać listy zawodników.');
@@ -75,38 +84,73 @@ const PlayersList = () => {
     }
   };
 
+  const handlePlayerClick = (playerId) => {
+    navigate(`/players/${playerId}`);
+  };
+
   // 🔍 Filtrowanie po nazwie
   const filteredPlayers = players.filter(player =>
     player.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) return <p style={{ textAlign: 'center' }}>Ładowanie zawodników...</p>;
-  if (error) return <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>;
+  if (loading) {
+    return (
+      <div className="players-list-container">
+        <p className="loading-message">Ładowanie zawodników...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="players-list">
+    <div className="players-list-container">
+      {error && <p className="error-message">{error}</p>}
+      
       <div className="search-container">
         <input
           type="text"
           placeholder="Szukaj zawodnika..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
         />
       </div>
 
-      {filteredPlayers.length === 0 ? (
-        <p style={{ textAlign: 'center' }}>Brak zawodników pasujących do wyszukiwania.</p>
-      ) : (
-        <div className="players-grid">
-          {filteredPlayers.map(player => (
-            <PlayerCard
+      <div className="players-grid">
+        {filteredPlayers.length === 0 ? (
+          <p className="no-results">
+            {searchTerm
+              ? 'Brak zawodników pasujących do wyszukiwania.'
+              : 'Brak dostępnych zawodników.'}
+          </p>
+        ) : (
+          filteredPlayers.map(player => (
+            <div
               key={player.id}
-              player={player}
-              onToggleFavorite={() => toggleFavorite(player.id, player.isFavorite)}
-            />
-          ))}
-        </div>
-      )}
+              className="player-item"
+              onClick={() => handlePlayerClick(player.id)}
+            >
+              <div className="player-avatar">
+                {<div className="image-skeleton infinite" />}
+                <img
+                  src={player.imageUrl}
+                  alt={player.name}
+                  style={{ display: player.imageLoaded ? 'block' : 'none' }}
+                />
+              </div>
+              <span className="player-name">{player.name}</span>
+              <button
+                className={`favorite-star ${player.isFavorite ? 'favorited' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(player.id, player.isFavorite);
+                }}
+              >
+                {player.isFavorite ? '⭐' : '☆'}
+              </button>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };

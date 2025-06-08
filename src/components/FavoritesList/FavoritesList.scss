@@ -1,8 +1,4 @@
-.players-list-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-
+.favorites-list-container {
   .loading-message,
   .error-message {
     text-align: center;
@@ -18,29 +14,7 @@
     color: #666;
   }
 
-  .search-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
-
-    .search-input {
-      padding: 0.75rem 1rem;
-      width: 100%;
-      max-width: 400px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.3s ease;
-
-      &:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-      }
-    }
-  }
-
-  .players-grid {
+  .favorites-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
@@ -49,7 +23,7 @@
     width: 100%;
     box-sizing: border-box;
 
-    .player-item {
+    .favorite-item {
       display: flex;
       align-items: center;
       padding: 1rem 1.5rem;
@@ -70,7 +44,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
-      .player-avatar {
+      .favorite-avatar {
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -81,35 +55,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
 
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
-
-        .image-skeleton {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          background: linear-gradient(
-            90deg,
-            #ddd 25%,
-            #eee 50%,
-            #ddd 75%
-          );
-          background-size: 200% 100%;
-          animation: shimmer 1.2s ease-in-out forwards;
-
-          &.infinite {
-            animation-iteration-count: infinite;
-          }
-        }
       }
 
-      .player-name {
+      .favorite-name {
         flex: 1;
         font-size: 1rem;
         font-weight: 600;
@@ -118,7 +72,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        min-width: 0;
+        min-width: 0; // Ważne dla właściwego działania text-overflow
         margin-right: 0.5rem;
       }
 
@@ -136,15 +90,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #ddd;
 
         &:hover {
           background: rgba(255, 193, 7, 0.2);
           transform: scale(1.1);
-        }
-
-        &.favorited {
-          color: #ffc107;
         }
       }
     }
@@ -160,21 +109,10 @@
   }
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
 // Responsive design
 @media (max-width: 1200px) {
-  .players-list-container {
-    padding: 1.5rem;
-
-    .players-grid {
+  .favorites-list-container {
+    .favorites-grid {
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1rem;
     }
@@ -182,30 +120,22 @@
 }
 
 @media (max-width: 768px) {
-  .players-list-container {
-    padding: 1rem;
-
-    .search-container {
-      .search-input {
-        max-width: 100%;
-      }
-    }
-
-    .players-grid {
+  .favorites-list-container {
+    .favorites-grid {
       grid-template-columns: 1fr;
       gap: 1rem;
       padding: 0.5rem 0;
 
-      .player-item {
+      .favorite-item {
         max-width: 100%;
         padding: 0.75rem 1rem;
         
-        .player-avatar {
+        .favorite-avatar {
           width: 45px;
           height: 45px;
         }
         
-        .player-name {
+        .favorite-name {
           font-size: 0.95rem;
         }
       }
@@ -214,20 +144,18 @@
 }
 
 @media (max-width: 480px) {
-  .players-list-container {
-    padding: 0.5rem;
-
-    .players-grid {
-      .player-item {
+  .favorites-list-container {
+    .favorites-grid {
+      .favorite-item {
         padding: 0.75rem 1rem;
 
-        .player-avatar {
+        .favorite-avatar {
           width: 40px;
           height: 40px;
           margin-right: 0.75rem;
         }
 
-        .player-name {
+        .favorite-name {
           font-size: 0.9rem;
         }
 
@@ -238,5 +166,44 @@
         }
       }
     }
+  }
+}
+
+.favorite-avatar {
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .image-skeleton {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(
+      90deg,
+      #ddd 25%,
+      #eee 50%,
+      #ddd 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.2s ease-in-out forwards;
+
+    &.infinite {
+      animation-iteration-count: infinite;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

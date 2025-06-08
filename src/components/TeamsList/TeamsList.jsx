@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import TeamCard from '../../components/TeamCard/TeamCard';
+import { useNavigate } from 'react-router-dom';
 import './TeamsList.scss';
 
-const fallbackImage = 'https://via.placeholder.com/300x300.png?text=No+Image';
+const fallbackImage = 'https://via.placeholder.com/300x300.png?text=Team+Logo';
 
 // 🎭 Mockowane dane jako fallback
 const mockTeams = [
@@ -47,7 +47,8 @@ const TeamsList = () => {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // 🔍 Nowy stan
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -77,16 +78,35 @@ const TeamsList = () => {
           league: 'Unknown',
           imageUrl: fallbackImage,
           isFavorite: false,
+          imageLoaded: false,
         }));
 
         console.log('🎯 Mapped teams:', mappedTeams); // Debug log
         setTeams(mappedTeams);
         setError('');
+
+        // Symulacja załadowania obrazków po 1 sekundzie
+        setTimeout(() => {
+          setTeams((prev) =>
+            prev.map((team) => ({ ...team, imageLoaded: true }))
+          );
+        }, 1000);
       } catch (err) {
         console.error('❌ Failed to fetch teams:', err);
         console.log('🎭 Using mock data as fallback');
         setError('Używam danych testowych (API niedostępne)');
-        setTeams(mockTeams); // Użyj mockowanych danych zamiast pustej tablicy
+        const teamsWithImageLoaded = mockTeams.map(team => ({
+          ...team,
+          imageLoaded: false,
+        }));
+        setTeams(teamsWithImageLoaded);
+
+        // Symulacja załadowania obrazków dla mock data
+        setTimeout(() => {
+          setTeams((prev) =>
+            prev.map((team) => ({ ...team, imageLoaded: true }))
+          );
+        }, 1000);
       } finally {
         setLoading(false);
       }
@@ -133,26 +153,27 @@ const TeamsList = () => {
     }
   };
 
+  const handleTeamClick = (teamId) => {
+    navigate(`/teams/${teamId}`);
+  };
+
   // 🔍 Filtrowanie po nazwie
   const filteredTeams = teams.filter(team =>
     team.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) return <p style={{ textAlign: 'center' }}>Ładowanie drużyn...</p>;
-  if (error && teams.length === 0) return <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>;
+  if (loading) {
+    return (
+      <div className="teams-list-container">
+        <p className="loading-message">Ładowanie drużyn...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="teams-list">
+    <div className="teams-list-container">
       {error && (
-        <div style={{ 
-          textAlign: 'center', 
-          marginBottom: '20px', 
-          padding: '10px', 
-          backgroundColor: '#fff3cd', 
-          color: '#856404',
-          border: '1px solid #ffeaa7',
-          borderRadius: '5px'
-        }}>
+        <div className="error-banner">
           {error}
         </div>
       )}
@@ -163,22 +184,46 @@ const TeamsList = () => {
           placeholder="Szukaj drużyny..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
         />
       </div>
 
-      {filteredTeams.length === 0 ? (
-        <p style={{ textAlign: 'center' }}>Brak drużyn pasujących do wyszukiwania.</p>
-      ) : (
-        <div className="teams-grid">
-          {filteredTeams.map(team => (
-            <TeamCard
+      <div className="teams-grid">
+        {filteredTeams.length === 0 ? (
+          <p className="no-results">
+            {searchTerm
+              ? 'Brak drużyn pasujących do wyszukiwania.'
+              : 'Brak dostępnych drużyn.'}
+          </p>
+        ) : (
+          filteredTeams.map(team => (
+            <div
               key={team.id}
-              team={team}
-              onToggleFavorite={() => toggleFavorite(team.id, team.isFavorite)}
-            />
-          ))}
-        </div>
-      )}
+              className="team-item"
+              onClick={() => handleTeamClick(team.id)}
+            >
+              <div className="team-avatar">
+                {!team.imageLoaded && <div className="image-skeleton infinite" />}
+                <img
+                  src={team.imageUrl}
+                  alt={team.name}
+                  style={{ display: team.imageLoaded ? 'block' : 'none' }}
+                />
+              </div>
+              <span className="team-name">{team.name}</span>
+              <button
+                className={`favorite-star ${team.isFavorite ? 'favorited' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(team.id, team.isFavorite);
+                }}
+              >
+                {team.isFavorite ? '⭐' : '☆'}
+              </button>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
