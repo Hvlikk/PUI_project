@@ -1,7 +1,6 @@
 .teams-list-container {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  margin-left: 20px;
+  margin-right: 20px;
 
   .loading-message,
   .error-message {
@@ -30,7 +29,7 @@
 
   .search-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 2rem;
 
     .search-input {
@@ -52,7 +51,7 @@
 
   .teams-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 1.5rem;
     justify-items: stretch;
     padding: 1rem 0;
@@ -180,20 +179,28 @@
 }
 
 // Responsive design
-@media (max-width: 1200px) {
+@media (max-width: 1600px) {
   .teams-list-container {
-    padding: 1.5rem;
 
     .teams-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
     }
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .teams-list-container {
-    padding: 1rem;
+
+    .teams-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  }
+}
+
+@media (max-width: 920px) {
+  .teams-list-container {
 
     .search-container {
       .search-input {
@@ -202,7 +209,7 @@
     }
 
     .teams-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2,1fr);
       gap: 1rem;
       padding: 0.5rem 0;
 
@@ -223,11 +230,11 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 550px) {
   .teams-list-container {
-    padding: 0.5rem;
 
     .teams-grid {
+        grid-template-columns: 1fr;
       .team-item {
         padding: 0.75rem 1rem;
 

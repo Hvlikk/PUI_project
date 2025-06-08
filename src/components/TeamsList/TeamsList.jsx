@@ -21,7 +21,7 @@ const mockTeams = [
     isFavorite: true,
   },
   {
-    id: 'mock-3',
+      id: 'mock-3',
     name: 'Manchester United',
     league: 'Premier League',
     imageUrl: fallbackImage,
@@ -203,7 +203,7 @@ const TeamsList = () => {
               onClick={() => handleTeamClick(team.id)}
             >
               <div className="team-avatar">
-                {!team.imageLoaded && <div className="image-skeleton infinite" />}
+                {/*!team.imageLoaded && */<div className="image-skeleton infinite" />}
                 <img
                   src={team.imageUrl}
                   alt={team.name}
