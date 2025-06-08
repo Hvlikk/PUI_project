@@ -115,7 +115,7 @@ const PlayersList = () => {
         />
       </div>
 
-      <div className="players-grid">
+      <div className='players-grid'>
         {filteredPlayers.length === 0 ? (
           <p className="no-results">
             {searchTerm

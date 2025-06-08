@@ -167,7 +167,7 @@ const SettingsPage = () => {
 
   return (
     <>
-      <div className="top">
+      <div className="settings-top">
         <h1>Hi, {username}!</h1>
         <h2>Here you can change your settings!</h2>
       </div>

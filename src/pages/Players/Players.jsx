@@ -4,7 +4,7 @@ import './Players.scss';
 
 const Players = () => {
   return (
-    <div className='top'>
+    <div>
       <div className='top'>
         <h1>Players</h1>
         <h2>Add players to your favorites! Just click ⭐!</h2>
