@@ -10,8 +10,6 @@ import {
   FaInfoCircle,
   FaEnvelope,
   FaSignInAlt,
-  FaMoon,
-  FaSun,
   FaFutbol,
   FaNewspaper,
   FaUserCircle,
@@ -53,18 +51,6 @@ function Navbar() {
         <h1>ScoreTracker</h1>
       </div>
 
-      <div className="theme-toggle">
-        <span className={`theme-label ${isDarkTheme ? 'active' : ''}`}>
-          <FaMoon />
-        </span>
-        <label className="switch">
-          <input type="checkbox" checked={!isDarkTheme} onChange={toggleTheme} />
-          <span className="slider"></span>
-        </label>
-        <span className={`theme-label ${!isDarkTheme ? 'active' : ''}`}>
-          <FaSun />
-        </span>
-      </div>
 
       <div className="navbar-right">
         <Link to="/dashboard"><FaHome /> Dashboard</Link>

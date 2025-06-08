@@ -1,0 +1,41 @@
+.games-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    margin-bottom: 1.5rem;
+    color: #666;
+  }
+
+  .error-message {
+    color: #c00;
+    margin-bottom: 1rem;
+  }
+
+  .filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .league-select,
+    .search-input {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      min-width: 200px;
+    }
+  }
+
+  .matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
