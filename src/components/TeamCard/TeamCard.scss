@@ -1,0 +1,71 @@
+.team-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 8px rgb(182, 182, 182);
+  max-width: 450px;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite ease-in-out;
+}
+
+.skeleton-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.team-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.team-image.hidden {
+  display: none;
+}
+
+.team-image.visible {
+  display: block;
+}
+
+.team-info {
+  margin-left: 24px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // gwiazdka po prawej
+}
+
+.favorite-star {
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.3s ease;
+  margin-left: 24px;
+}
+
+.favorite-star.favorite {
+  color: gold;
+  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.7));
+}
+
+.favorite-star:hover {
+  color: orange;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

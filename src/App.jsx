@@ -21,9 +21,9 @@ import Players from './pages/Players/Players';
 import Teams from './pages/Teams/Teams';
 import Login from './pages/Login/Login';
 import PlayerPage from './components/PlayerPage/PlayerPage';
-import TeamsList from './pages/TeamList/TeamsList';
 import Register from './pages/Register/Register'
 import SettingsPage from './pages/SettingsPage/SettingsPage';
+import TeamPage from './pages/TeamPage/TeamPage';
 
 function App() {
   return (
@@ -48,8 +48,8 @@ function App() {
             <Route path="/favorites" element={<Favorites/>}/>
             <Route path="/players" element={<Players />} />
             <Route path="/players/:id" element={<PlayerPage />} />
-            <Route path="/teams/:id" element={<Teams />} />
-            <Route path="/teams" element={<TeamsList />} />
+            <Route path="/teams/:id" element={<TeamPage />} />
+            <Route path="/teams" element={<Teams />} />
             <Route path="/games" element={<Games />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
