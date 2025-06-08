@@ -24,6 +24,8 @@ import PlayerPage from './components/PlayerPage/PlayerPage';
 import Register from './pages/Register/Register'
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import TeamPage from './pages/TeamPage/TeamPage';
+import PlayerCard from './components/PlayerCard/PlayerCard';
+import TeamCard from './components/TeamCard/TeamCard'
 
 function App() {
   return (
@@ -48,13 +50,12 @@ function App() {
             <Route path="/favorites" element={<Favorites/>}/>
             <Route path="/players" element={<Players />} />
             <Route path="/players/:id" element={<PlayerPage />} />
-            <Route path="/teams/:id" element={<TeamPage />} />
+            <Route path="/teamsTest" element={<TeamPage />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/games" element={<Games />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path='/settings' element={<SettingsPage/>} />
-
           </Routes>
 
         </main>

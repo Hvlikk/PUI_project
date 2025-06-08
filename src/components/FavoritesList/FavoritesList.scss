@@ -179,6 +179,12 @@
   }
 }
 
+.favorite-star:focus,
+.favorite-star:active {
+  outline: none;
+  border: none;
+}
+
 .favorite-avatar {
   position: relative;
 
