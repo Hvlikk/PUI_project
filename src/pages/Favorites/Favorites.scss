@@ -1,7 +1,6 @@
 .favorites-container {
-  padding: 20px;
-  max-width: 1700px;
-  margin: 0 auto;
+  margin-left: 20px;
+  margin-right: 20px;
 
   .favorites-header {
     margin-bottom: 30px;
@@ -20,7 +19,9 @@
   }
 
   .favorites-search {
+    display: flex;
     margin-bottom: 30px;
+    align-items: flex-start;
 
     .search-input {
       width: 200px;
@@ -91,4 +92,9 @@
       }
     }
   }
+}
+
+
+.fav-top {
+  text-align: left;
 }

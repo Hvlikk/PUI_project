@@ -23,14 +23,10 @@ const Favorites = () => {
 
   return (
     <div className="favorites-container">
-      <Box className="favorites-header">
-        <Typography variant="h1" className="favorites-title">
-          Favorites
-        </Typography>
-        <Typography variant="subtitle1" className="favorites-subtitle">
-          Your favorite teams and players!
-        </Typography>
-      </Box>
+          <div className="fav-top">
+            <h1>Favorites</h1>
+            <h2>Your favorite teams and players!</h2>
+          </div>
 
       <Box className="favorites-search">
         <input 
