@@ -8,6 +8,14 @@
   color: inherit;
   transition: background 0.3s ease;
 
+  .players {
+    display: flex;
+  }
+
+  .players-heading {
+    text-align: left;
+  }
+
   .player-header {
     text-align: center;
     margin-bottom: 2rem;

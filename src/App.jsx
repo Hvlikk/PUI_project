@@ -20,10 +20,10 @@ import Games from './pages/Games/Games';
 import Players from './pages/Players/Players';
 import Teams from './pages/Teams/Teams';
 import Login from './pages/Login/Login';
-import PlayersList from './pages/Playerslist/PlayersList';
+import PlayerPage from './components/PlayerPage/PlayerPage';
 import TeamsList from './pages/TeamList/TeamsList';
 import Register from './pages/Register/Register'
-
+import SettingsPage from './pages/SettingsPage/SettingsPage';
 
 function App() {
   return (
@@ -46,13 +46,14 @@ function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
             <Route path="/news" element={<News/>}/>
             <Route path="/favorites" element={<Favorites/>}/>
-            <Route path="/players" element={<PlayersList />} />
-            <Route path="/players/:id" element={<Players />} />
+            <Route path="/players" element={<Players />} />
+            <Route path="/players/:id" element={<PlayerPage />} />
             <Route path="/teams/:id" element={<Teams />} />
             <Route path="/teams" element={<TeamsList />} />
             <Route path="/games" element={<Games />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path='/settings' element={<SettingsPage/>} />
 
           </Routes>
 

@@ -31,33 +31,20 @@
     border-color: #007bff;
   }
 }
+}
 
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 
-  .player-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    padding: 1rem;
-    width: 200px;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s ease, background 0.3s;
-
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      margin: 0;
-      font-size: 1.1rem;
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-5px);
-    }
+  input {
+    padding: 8px 12px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
   }
 }
+
+

@@ -1,36 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+const fallbackImage = 'https://via.placeholder.com/400x400.png?text=No+Image';
+
 const PlayerPage = () => {
-  const { playerId } = useParams();
+  const { id } = useParams(); // <- uuid z URL
   const [player, setPlayer] = useState(null);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchPlayerDetails = async () => {
+    const fetchPlayer = async () => {
       try {
-        const response = await fetch(`/api/players/${playerId}`);
-        const data = await response.json();
-        setPlayer(data);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`http://localhost:8081/api/players/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!res.ok) throw new Error(`API returned status ${res.status}`);
+        const data = await res.json();
+
+        setPlayer({
+          name: data.name || `${data.firstName} ${data.lastName}`,
+          position: data.position || 'Unknown',
+          imageUrl: fallbackImage, // lub data.imageUrl jeśli dostępne
+        });
+        setError('');
       } catch (err) {
-        setError('Unable to fetch player details.');
+        console.error('Failed to fetch player:', err);
+        setError('Nie udało się pobrać danych zawodnika.');
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchPlayerDetails();
-  }, [playerId]);
+    fetchPlayer();
+  }, [id]);
 
-  if (error) return <div>{error}</div>;
-
-  if (!player) return <div>Loading...</div>;
+  if (loading) return <p style={{ textAlign: 'center' }}>Ładowanie...</p>;
+  if (error) return <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>;
+  if (!player) return null;
 
   return (
     <div className="player-page">
-      <h1>{player.name}</h1>
-      <img src={player.imageUrl} alt={player.name} className="player-image" />
-      <p>Position: {player.position}</p>
-      <p>Nationality: {player.nationality}</p>
-      {/* Additional player details, like career stats */}
+      <img src={player.imageUrl} alt={player.name} />
+      <h2>{player.name}</h2>
+      <p>Pozycja: {player.position}</p>
+      {/* Możesz dodać więcej danych, np. klub, narodowość, itd. */}
     </div>
   );
 };
