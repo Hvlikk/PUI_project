@@ -3,8 +3,6 @@ import { useParams } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 import './TeamPage.scss';
 
-const fallbackImage = 'https://via.placeholder.com/150x150.png?text=No+Image';
-
 // Mock data dla przypadku gdy API nie działa
 const mockTeamData = {
   name: 'FC Barcelona',
@@ -57,42 +55,36 @@ const mockPlayers = [
     id: 1,
     name: 'R. Lewandowski',
     position: 'Forward',
-    imageUrl: 'https://img.a.transfermarkt.technology/portrait/big/38253-1668501429.jpg?lm=1',
     isFavorite: false,
   },
   {
     id: 2,
     name: 'Pedri',
     position: 'Midfielder',
-    imageUrl: 'https://img.a.transfermarkt.technology/portrait/big/401923-1689754142.jpg?lm=1',
     isFavorite: true,
   },
   {
     id: 3,
     name: 'Gavi',
     position: 'Midfielder',
-    imageUrl: 'https://img.a.transfermarkt.technology/portrait/big/656241-1668501513.jpg?lm=1',
     isFavorite: false,
   },
   {
     id: 4,
     name: 'Ter Stegen',
     position: 'Goalkeeper',
-    imageUrl: 'https://img.a.transfermarkt.technology/portrait/big/74857-1668501521.jpg?lm=1',
     isFavorite: true,
   },
   {
     id: 5,
     name: 'Araujo',
     position: 'Defender',
-    imageUrl: 'https://img.a.transfermarkt.technology/portrait/big/480267-1668501457.jpg?lm=1',
     isFavorite: false,
   },
   {
     id: 6,
     name: 'F. de Jong',
     position: 'Midfielder',
-    imageUrl: 'https://img.a.transfermarkt.technology/portrait/big/326330-1668501480.jpg?lm=1',
     isFavorite: false,
   },
 ];
@@ -105,6 +97,7 @@ const TeamPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [usingMockData, setUsingMockData] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -133,7 +126,7 @@ const TeamPage = () => {
           website: teamData.website || '',
           venue: teamData.venue || '',
           address: teamData.address || '',
-          imageUrl: teamData.crest || teamData.imageUrl || fallbackImage,
+          imageUrl: teamData.crest || teamData.imageUrl || null,
         });
 
         // Pobierz mecze drużyny (jeśli endpoint istnieje)
@@ -229,6 +222,10 @@ const TeamPage = () => {
     }
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   if (loading) return <div className="loading">Ładowanie...</div>;
   if (error) return <div className="error">{error}</div>;
   if (!team) return null;
@@ -242,8 +239,16 @@ const TeamPage = () => {
       )}
       
       <div className="team-header">
-        <div className="team-logo">
-          <img src={team.imageUrl} alt={team.name} />
+        <div className="teampage-logo">
+          {!team.imageUrl || imageError ? (
+            <div className="image-skeleton infinite"></div>
+          ) : (
+            <img 
+              src={team.imageUrl} 
+              alt={team.name}
+              onError={handleImageError}
+            />
+          )}
         </div>
         
         <div className="team-info">
@@ -338,15 +343,8 @@ const TeamPage = () => {
         {players.length > 0 ? (
           players.map((player) => (
             <div key={player.id} className="player-card">
-              <div className="image-skeleton infinite">
-                <img 
-                  src={player.imageUrl || fallbackImage} 
-                  alt={player.name}
-                  onError={(e) => {
-                    e.target.src = fallbackImage;
-                  }}
-                />
-              </div>
+              {/* Zawsze pokazuj skeleton image dla zawodników */}
+              <div className="image-skeleton infinite"></div>
               <div className="player-info">
                 <span className="player-name">{player.name}</span>
               </div>

@@ -50,7 +50,7 @@ function App() {
             <Route path="/favorites" element={<Favorites/>}/>
             <Route path="/players" element={<Players />} />
             <Route path="/players/:id" element={<PlayerPage />} />
-            <Route path="/teamsTest" element={<TeamPage />} />
+            <Route path="/teams/:id" element={<TeamPage />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/games" element={<Games />} />
             <Route path="/login" element={<Login />} />
