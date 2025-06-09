@@ -1,5 +1,6 @@
 .settings-top {
-  text-align: center;
+  text-align: left;
+  margin-left: 20px;
   margin-bottom: 40px;
 
   h1 {
@@ -14,6 +15,7 @@
 }
 
 .settings {
+  text-align: left;
   display: flex;
   justify-content: center;
   padding: 0 20px;
@@ -23,7 +25,6 @@
   background: white;
   border-radius: 10px;
   padding: 30px;
-  max-width: 800px;
   width: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
@@ -33,6 +34,7 @@
   }
 
   .setting-row {
+    text-align: left;
     display: flex;
     justify-content: space-between;
     align-items: center;

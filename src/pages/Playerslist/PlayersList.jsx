@@ -60,32 +60,37 @@ const PlayersList = () => {
     fetchPlayers();
   }, []);
 
-  const toggleFavorite = async (playerId, currentlyFavorite) => {
-    try {
-      const token = localStorage.getItem('token');
-      const url = `http://localhost:8081/api/users/favourites/players/${playerId}`;
-      const method = currentlyFavorite ? 'DELETE' : 'POST';
+const toggleFavorite = async (playerId, currentlyFavorite) => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    // Fixed URL pattern to match backend
+    const url = currentlyFavorite 
+      ? `http://localhost:8081/api/players/favourites/players/${playerId}`  // DELETE - matches backend
+      : `http://localhost:8081/api/players/${playerId}/favourites`;        // POST - now matches backend
+    
+    const method = currentlyFavorite ? 'DELETE' : 'POST';
 
-      const res = await fetch(url, {
-        method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+    const res = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
-      if (!res.ok) throw new Error(`API returned status ${res.status}`);
+    if (!res.ok) throw new Error(`API returned status ${res.status}`);
 
-      setPlayers(prev =>
-        prev.map(p =>
-          p.id === playerId ? { ...p, isFavorite: !currentlyFavorite } : p
-        )
-      );
-    } catch (err) {
-      console.error('Failed to toggle favorite:', err);
-      alert('Nie udało się zaktualizować ulubionych.');
-    }
-  };
+    setPlayers(prev =>
+      prev.map(p =>
+        p.id === playerId ? { ...p, isFavorite: !currentlyFavorite } : p
+      )
+    );
+  } catch (err) {
+    console.error('Failed to toggle favorite:', err);
+    alert('Nie udało się zaktualizować ulubionych.');
+  }
+};
 
   const handlePlayerClick = (playerId) => {
     navigate(`/players/${playerId}`);
