@@ -129,7 +129,7 @@ const TeamsList = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const url = `http://localhost:8081/api/users/favourites/teams/${teamId}`;
+      const url = `http://localhost:8081/api/teams/${teamId}/favourites`;
       const method = currentlyFavorite ? 'DELETE' : 'POST';
 
       const res = await fetch(url, {

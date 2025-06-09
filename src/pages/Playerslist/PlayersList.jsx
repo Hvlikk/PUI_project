@@ -27,7 +27,10 @@ const PlayersList = () => {
 
         const data = await res.json();
 
-        const mappedPlayers = data.map(player => ({
+        // Filtruj tylko zawodników (nie trenerów)
+        const playersOnly = data.filter(player => !player.isCoach);
+
+        const mappedPlayers = playersOnly.map(player => ({
           id: player.uuid,
           name: player.name,
           position: 'Unknown',
