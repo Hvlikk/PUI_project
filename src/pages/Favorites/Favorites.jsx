@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 import './Favorites.scss';
@@ -28,7 +27,7 @@ const Favorites = () => {
             <h2>Your favorite teams and players!</h2>
           </div>
 
-      <Box className="favorites-search">
+      <div className="favorites-search">
         <input 
           type="text" 
           placeholder="Type name" 
@@ -36,36 +35,35 @@ const Favorites = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-      </Box>
+      </div>
 
-      <Box className="favorites-tabs">
-        <ButtonGroup className="tab-buttons">
-          <Button
-            variant={activeTab === 'teams' ? 'contained' : 'outlined'}
+      <div className="favorites-tabs">
+        <div className="tab-group">
+          <button
+            className={`tab ${activeTab === 'teams' ? 'active' : ''}`}
             onClick={() => handleTabChange('teams')}
-            className={`tab-button ${activeTab === 'teams' ? 'active' : ''}`}
           >
-            Teams
-          </Button>
-          <Button
-            variant={activeTab === 'players' ? 'contained' : 'outlined'}
+            ⚽ Teams
+          </button>
+          <button
+            className={`tab ${activeTab === 'players' ? 'active' : ''}`}
             onClick={() => handleTabChange('players')}
-            className={`tab-button ${activeTab === 'players' ? 'active' : ''}`}
           >
-            Players
-          </Button>
-        </ButtonGroup>
+            👤 Players
+          </button>
+        </div>
 
-        <Button
-          variant="contained"
-          onClick={handleAddMore}
+        <button
           className="add-more-button"
+          onClick={handleAddMore}
         >
           Add more!
-        </Button>
-      </Box>
+        </button>
+      </div>
 
-      <FavoritesList type={activeTab} searchQuery={searchQuery} />
+      <div className="tab-content">
+        <FavoritesList type={activeTab} searchQuery={searchQuery} />
+      </div>
     </div>
   );
 };
