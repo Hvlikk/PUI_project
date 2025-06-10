@@ -17,9 +17,11 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem('theme', newTheme ? 'dark' : 'light');
   };
 
-  useEffect(() => {
-    document.body.classList.toggle('light-theme', !isDarkTheme);
-  }, [isDarkTheme]);
+ useEffect(() => {
+  document.body.classList.toggle('dark-theme', isDarkTheme);
+  document.body.classList.toggle('light-theme', !isDarkTheme);
+}, [isDarkTheme]);
+
 
   return (
     <ThemeContext.Provider value={{ isDarkTheme, toggleTheme }}>

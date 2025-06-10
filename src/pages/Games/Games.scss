@@ -6,8 +6,9 @@
 
 .games-page {
   margin: 0 20px;
-  background-color: var(--bg-color, #f8f9fa);
-  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+
 
   .title {
     font-size: 2.5rem;
@@ -34,7 +35,7 @@
   .last-update {
     max-width: 175px;
     font-size: 0.9rem;
-    color: var(--text-secondary, #666);
+    color: var(--color-text);
     margin-bottom: 1rem;
     padding: 0.5rem 1rem;
     margin-left: 16px;

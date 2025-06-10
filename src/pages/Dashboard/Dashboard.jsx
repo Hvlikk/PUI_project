@@ -1,6 +1,6 @@
 import React from 'react';
 import './Dashboard.scss';
-import Matchcard from '../../components/Matchcard/Matchcard'; // Zakładamy, że masz komponent Matchcard
+import Matchcard from '../../components/Matchcard/Matchcard'; 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DashboardTabs from '../../components/DashboardTabs/DashboardTabs';
 

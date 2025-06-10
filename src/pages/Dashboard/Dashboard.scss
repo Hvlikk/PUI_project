@@ -1,56 +1,81 @@
-/* App.css */
-  .content {
-    text-align: center;
-  }
-  
+.content {
+  text-align: center;
+}
+
 .league-section {
   display: flex;
   margin-bottom: 32px;
   justify-content: space-between;
 
-  & .league-selector {
-    margin-left: 16px;
-  }
+  select,
+select.league-selector {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  appearance: none;
 
-  & .league-buttons {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-primary);
+  }
+}
+
+
+  .league-buttons {
     display: flex;
     gap: 16px;
   }
 }
 
-
 .top {
   margin-left: 20px;
 }
 
-  .dashboard {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 20px;  /* Odstęp między kartami */
-    max-width: 100%;  /* Upewnia się, że kontener nie będzie szerszy niż 100% */
-    width: 100%;
-  }
-  
-  .top {
-    width: 100%;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .matchcard-container{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 20px;  /* Odstęp między kartami */
-    max-width: 100%;  /* Upewnia się, że kontener nie będzie szerszy niż 100% */
-    width: 100%;  
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  max-width: 100%;
+  width: 100%;
 }
 
+.top {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.matchcard-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  max-width: 100%;
+  width: 100%;
+}
 
 .content {
   width: 100%;
 }
 
-  
+/* Wspólne kolory i tło */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dashboard,
+.matchcard-container,
+.content,
+.league-section,
+.league-buttons {
+  background-color: transparent;
+  color: var(--color-text);
+}

@@ -1,86 +1,82 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+// index.scss
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-  min-height: 100%;
-  height: auto;
-  padding: 0;
+:root {
+  --color-bg: #ffffff;
+  --color-text: #212121;
+  --color-surface: #f1f1f1;
+  --color-border: #ccc;
+  --color-primary: #4CAF50;
+  --color-on-primary: #ffffff;
+  --color-elevated: #ffffff;
+}
+
+body.light-theme {
+  --color-bg: #ffffff;
+  --color-text: #212121;
+  --color-surface: #f1f1f1;
+  --color-border: #ccc;
+  --color-primary: #4CAF50;
+  --color-on-primary: #ffffff;
+}
+
+body.dark-theme {
+  --color-bg: #121212;
+  --color-text: #eeeeee;
+  --color-surface: #1e1e1e;
+  --color-border: #444;
+  --color-primary: #4CAF50;
+  --color-on-primary: #ffffff;
+  --color-elevated: #1f1f1f; 
+   --color-surface: #2b2b2b;
+}
+
+/* Reset i ogólne style */
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: var(--color-accent);
+  text-decoration: none;
+
+  &:hover {
+    opacity: 0.85;
+  }
 }
 
-#root {
-  min-height: 100%;
+button {
+  font-family: inherit;
+  padding: 0.6em 1.2em;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: var(--color-card);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+button:hover {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.App {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-
- 
-  background-color: #242424;
-  color: rgba(255, 255, 255, 0.87);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-body.light-theme {
-  background-color: #ffffff;
-  color: #213547;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.app-content {
+  flex: 1;
+  margin-top: 60px; // zakładana wysokość navbara
 }

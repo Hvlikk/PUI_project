@@ -9,18 +9,18 @@ const Footer = () => {
                 <div className="footer-wrapper">
                     <div className="content-container">                            
                         <Link to="/dashboard" class="nav-link">Dashboard</Link>
-                        <Link to="/league" class="nav-link">League</Link>
-                        <Link to="/favorites" class="nav-link">Favorites</Link>
+                        <Link to="/players" class="nav-link">Players</Link>
+                        <Link to="/teams" class="nav-link">Teams</Link>
                     </div>
                    
                     <div className="content-container">
+                            <Link to="/favorites" class="nav-link">Favorites</Link>
                             <Link to="/news" class="nav-link">News</Link>
-                            <Link to="/live" class="nav-link">Live</Link>
-                            <Link to="/about" class="nav-link">About</Link>
+                            <Link to="/games" class="nav-link">Games</Link>
                     </div>
                    
                     <div className="content-container middle">
-                        <Link to="/contact" class="nav-link">Contact</Link>
+                        <Link to="/about" class="nav-link">About</Link>
                         <Link to="/tos" class="nav-link">TOS</Link>
                         <Link to="/privacy-policy" class="nav-link">Privacy Policy</Link>
                     </div>
