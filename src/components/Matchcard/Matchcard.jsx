@@ -89,9 +89,19 @@ function Matchcard({ match, teams, competitions, isFavourite = false, onFavourit
       </div>
 
       <div className="match-footer">
-        <div className="footer-item">Statistics</div>
-        <div className="footer-item">Line-ups</div>
-      </div>
+  <div className="footer-date">
+    {match.utcDate
+      ? new Date(match.utcDate).toLocaleString([], {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      : 'No date available'}
+  </div>
+</div>
+
     </div>
   );
 }
