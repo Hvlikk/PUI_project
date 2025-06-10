@@ -51,33 +51,51 @@ const TeamsList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchTeams = async () => {
+    const fetchTeamsAndFavorites = async () => {
       console.log('🔥 Starting API call for teams...'); // Debug log
       try {
         const token = localStorage.getItem('token');
         console.log('🔑 Token:', token ? 'exists' : 'missing'); // Debug log
         
-        const res = await fetch('http://localhost:8081/api/teams', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        // Pobierz drużyny i ulubione równolegle
+        const [teamsRes, favoritesRes] = await Promise.all([
+          fetch('http://localhost:8081/api/teams', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }),
+          fetch('http://localhost:8081/api/teams/favourites', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          })
+        ]);
 
-        console.log('📡 API Response status:', res.status); // Debug log
+        console.log('📡 Teams API Response status:', teamsRes.status); // Debug log
+        console.log('📡 Favorites API Response status:', favoritesRes.status); // Debug log
 
-        if (!res.ok) throw new Error(`API returned status ${res.status}`);
+        if (!teamsRes.ok) throw new Error(`Teams API returned status ${teamsRes.status}`);
+        if (!favoritesRes.ok) throw new Error(`Favorites API returned status ${favoritesRes.status}`);
 
-        const data = await res.json();
-        console.log('📦 API Data received:', data); // Debug log
+        const teamsData = await teamsRes.json();
+        const favoritesData = await favoritesRes.json();
+        
+        console.log('📦 Teams Data received:', teamsData); // Debug log
+        console.log('📦 Favorites Data received:', favoritesData); // Debug log
 
-        const mappedTeams = data.map(team => ({
+        // Stwórz set z ID ulubionych drużyn dla szybkiego wyszukiwania
+        const favoriteTeamIds = new Set(favoritesData.map(fav => fav.uuid));
+
+        const mappedTeams = teamsData.map(team => ({
           id: team.uuid,
           name: team.name,
           league: 'Unknown',
           imageUrl: fallbackImage,
-          isFavorite: false,
+          isFavorite: favoriteTeamIds.has(team.uuid), // Sprawdź czy jest w ulubionych
           imageLoaded: false,
         }));
 
@@ -92,7 +110,7 @@ const TeamsList = () => {
           );
         }, 1000);
       } catch (err) {
-        console.error('❌ Failed to fetch teams:', err);
+        console.error('❌ Failed to fetch teams or favorites:', err);
         console.log('🎭 Using mock data as fallback');
         setError('Używam danych testowych (API niedostępne)');
         const teamsWithImageLoaded = mockTeams.map(team => ({
@@ -112,7 +130,7 @@ const TeamsList = () => {
       }
     };
 
-    fetchTeams();
+    fetchTeamsAndFavorites();
   }, []);
 
   const toggleFavorite = async (teamId, currentlyFavorite) => {

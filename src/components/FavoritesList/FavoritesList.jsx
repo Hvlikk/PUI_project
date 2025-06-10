@@ -120,8 +120,8 @@ const FavoritesList = ({ type, searchQuery }) => {
       const token = localStorage.getItem('token');
       const endpoint =
         type === 'teams'
-          ? `http://localhost:8081/api/favorites/teams/${itemId}`
-          : `http://localhost:8081/api/favorites/players/${itemId}`;
+          ? `http://localhost:8081/api/teams/${itemId}/favourites`
+          : `http://localhost:8081/api/players/${itemId}/favourites`;
       const method = currentlyFavorite ? 'DELETE' : 'POST';
 
       const res = await fetch(endpoint, {

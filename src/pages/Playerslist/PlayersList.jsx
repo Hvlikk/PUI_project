@@ -12,30 +12,46 @@ const PlayersList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPlayers = async () => {
+    const fetchPlayersAndFavorites = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:8081/api/players', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        
+        // Pobierz zawodników i ulubione równolegle
+        const [playersRes, favoritesRes] = await Promise.all([
+          fetch('http://localhost:8081/api/players', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }),
+          fetch('http://localhost:8081/api/players/favourites', {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          })
+        ]);
 
-        if (!res.ok) throw new Error(`API returned status ${res.status}`);
+        if (!playersRes.ok) throw new Error(`Players API returned status ${playersRes.status}`);
+        if (!favoritesRes.ok) throw new Error(`Favorites API returned status ${favoritesRes.status}`);
 
-        const data = await res.json();
+        const playersData = await playersRes.json();
+        const favoritesData = await favoritesRes.json();
 
         // Filtruj tylko zawodników (nie trenerów)
-        const playersOnly = data.filter(player => !player.isCoach);
+        const playersOnly = playersData.filter(player => !player.isCoach);
+
+        // Stwórz set z ID ulubionych zawodników dla szybkiego wyszukiwania
+        const favoritePlayerIds = new Set(favoritesData.map(fav => fav.uuid));
 
         const mappedPlayers = playersOnly.map(player => ({
           id: player.uuid,
           name: player.name,
           position: 'Unknown',
           imageUrl: fallbackImage,
-          isFavorite: false,
+          isFavorite: favoritePlayerIds.has(player.uuid), // Sprawdź czy jest w ulubionych
           imageLoaded: false,
         }));
 
@@ -49,7 +65,7 @@ const PlayersList = () => {
           );
         }, 1000);
       } catch (err) {
-        console.error('Failed to fetch players:', err);
+        console.error('Failed to fetch players or favorites:', err);
         setError('Nie udało się pobrać listy zawodników.');
         setPlayers([]);
       } finally {
@@ -57,7 +73,7 @@ const PlayersList = () => {
       }
     };
 
-    fetchPlayers();
+    fetchPlayersAndFavorites();
   }, []);
 
 const toggleFavorite = async (playerId, currentlyFavorite) => {
