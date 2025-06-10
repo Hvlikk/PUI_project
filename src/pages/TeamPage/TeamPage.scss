@@ -84,7 +84,7 @@
       font-size: 48px;
       font-weight: bold;
       margin: 0 0 30px 0;
-      color: #2c3e50;
+      color: var(--color-team-primary);
     }
     
     .team-details {
@@ -152,7 +152,7 @@
   h2 {
     font-size: 32px;
     font-weight: bold;
-    color: #2c3e50;
+    color: var(--color-team-primary);
     margin: 0 0 20px 0;
     padding-bottom: 10px;
     border-bottom: 3px solid #e9ecef;
@@ -204,11 +204,80 @@
   }
 }
 
+// Sekcja trenerów
+.coaches-section {
+  margin-bottom: 40px;
+  
+  h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--color-team-primary);
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #e9ecef;
+  }
+  
+  .coaches-grid {
+    display: grid;
+    //grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    
+    .coach-card {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #fff5f5;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ffcdd2;
+      position: relative;
+
+      .image-skeleton {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(
+          90deg,
+          #ddd 25%,
+          #eee 50%,
+          #ddd 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.2s ease-in-out forwards;
+
+        &.infinite {
+          animation-iteration-count: infinite;
+        }
+      }
+      
+      .coach-info {
+        flex: 1;
+        
+        .coach-name {
+          display: block;
+          font-weight: bold;
+          color: #2c3e50;
+          margin-bottom: 4px;
+        }
+        
+        .coach-role {
+          font-size: 12px;
+          color: #d32f2f;
+          font-weight: 500;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}
+
 .team-section {
   h2 {
     font-size: 32px;
     font-weight: bold;
-    color: #2c3e50;
+    color: var(--color-primary);
     margin: 0 0 20px 0;
     padding-bottom: 10px;
     border-bottom: 3px solid #e9ecef;
@@ -229,6 +298,21 @@
       border-radius: 8px;
       border: 1px solid #e9ecef;
       position: relative;
+      transition: all 0.3s ease;
+
+      &.clickable {
+        cursor: pointer;
+        
+        &:hover {
+          background: #e9ecef;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          
+          .player-name {
+            color: #3498db;
+          }
+        }
+      }
 
       .image-skeleton {
         position: relative;
@@ -283,6 +367,7 @@
           font-weight: bold;
           color: #2c3e50;
           margin-bottom: 4px;
+          transition: color 0.3s ease;
         }
         
         .player-position {
@@ -292,19 +377,37 @@
       }
       
       .favorite-star {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
         cursor: pointer;
-        color: #ced4da;
+        padding: 0.25rem;
+        border-radius: 4px;
         transition: all 0.3s ease;
-        font-size: 20px;
-        
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ced4da;
+        z-index: 2; // Zapewnia, że przycisk jest nad klikawalną kartą
+
         &:hover {
-          color: #ffc107;
+          background: rgba(255, 193, 7, 0.2);
           transform: scale(1.1);
+          color: #ffc107;
         }
-        
-        &.favorite {
+
+        &.favorited {
           color: #ffc107;
           filter: drop-shadow(0 0 4px rgba(255, 193, 7, 0.5));
+        }
+
+        &:focus,
+        &:active {
+          outline: none;
+          border: none;
         }
       }
     }
@@ -332,6 +435,29 @@
 }
 
 // Responsive design
+@media (max-width: 2000px) {
+  .coaches-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1600px) {
+  .coaches-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (max-width: 1280px) {
+  .coaches-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 1000px) {
+  .coaches-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
 @media (max-width: 768px) {
   .team-header {
     flex-direction: column;
@@ -351,7 +477,8 @@
     justify-content: flex-start;
   }
   
-  .players-grid {
+  .players-grid,
+  .coaches-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -382,37 +509,4 @@
   100% {
     background-position: 200% 0;
   }
-}
-
-.favorite-star {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ced4da; // domyślny kolor "wyłączony"
-
-  &:hover {
-    background: rgba(255, 193, 7, 0.2);
-    transform: scale(1.1);
-  }
-
-  &.favorite {
-    color: #ffc107; // kolor "włączony"
-    filter: drop-shadow(0 0 4px rgba(255, 193, 7, 0.5));
-  }
-}
-
-.favorite-star:focus,
-.favorite-star:active {
-  outline: none;
-  border: none;
 }

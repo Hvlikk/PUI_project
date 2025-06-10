@@ -4,6 +4,39 @@
   margin: 20px;
 }
 
+.league-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+
+  .league-selector {
+    flex: 1;
+    max-width: 300px;
+  }
+
+  .league-buttons {
+    display: flex;
+    gap: 10px;
+
+    button {
+      padding: 8px 16px;
+      background-color: var(--color-primary);
+      color: var(--color-on-primary);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: var(--color-primary-dark, #0056b3);
+      }
+    }
+  }
+}
+
 .tabs {
   display: flex;
 }
@@ -45,6 +78,29 @@
   display: block;
 }
 
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.loading {
+  color: #666;
+}
+
+.no-matches, .no-results {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin: 2rem 0;
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
 .tab-wrapper {
   display: flex;
   flex-direction: column;
@@ -69,6 +125,117 @@
       max-width: 300px;
     }
   }
+
+  // Style dla ulubionych zawodników i drużyn - zaimportowane z odpowiednich komponentów
+  .favourites-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    justify-items: stretch;
+    padding: 1rem 0;
+    width: 100%;
+    box-sizing: border-box;
+
+    .player-item, .team-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: #f8f9fa;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      position: relative;
+      min-height: 80px;
+
+      &:hover {
+        background: #e9ecef;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .player-avatar, .team-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 1rem;
+        flex-shrink: 0;
+        background: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .image-skeleton {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background: linear-gradient(
+            90deg,
+            #ddd 25%,
+            #eee 50%,
+            #ddd 75%
+          );
+          background-size: 200% 100%;
+          animation: shimmer 1.2s ease-in-out forwards;
+
+          &.infinite {
+            animation-iteration-count: infinite;
+          }
+        }
+      }
+
+      .player-name, .team-name {
+        flex: 1;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        min-width: 0;
+        margin-right: 0.5rem;
+      }
+
+      .favorite-star {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ddd;
+
+        &:hover {
+          background: rgba(255, 193, 7, 0.2);
+          transform: scale(1.1);
+        }
+
+        &.favorited {
+          color: #ffc107;
+        }
+      }
+    }
+  }
 }
 
 .tab-header {
@@ -76,6 +243,16 @@
   padding: 16px;
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Responsive design dla kart meczów
 @media (max-width: 1496px) {
   .tab-wrapper .cards-section {
     grid-template-columns: repeat(5, 1fr);
@@ -107,5 +284,130 @@
 
   .tab-wrapper .cards-section {
     grid-template-columns: 1fr;
+  }
+}
+
+// Responsive design dla ulubionych
+@media (max-width: 1600px) {
+  .tab-wrapper .favourites-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .tab-wrapper .favourites-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 920px) {
+  .tab-wrapper .favourites-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 0.5rem 0;
+
+    .player-item, .team-item {
+      max-width: 100%;
+      padding: 0.75rem 1rem;
+      
+      .player-avatar, .team-avatar {
+        width: 45px;
+        height: 45px;
+      }
+      
+      .player-name, .team-name {
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 550px) {
+  .tab-wrapper .favourites-grid {
+    grid-template-columns: 1fr;
+
+    .player-item, .team-item {
+      padding: 0.75rem 1rem;
+
+      .player-avatar, .team-avatar {
+        width: 40px;
+        height: 40px;
+        margin-right: 0.75rem;
+      }
+
+      .player-name, .team-name {
+        font-size: 0.9rem;
+      }
+
+      .favorite-star {
+        font-size: 1rem;
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+
+  .league-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+
+    .league-selector {
+      max-width: 100%;
+    }
+
+    .league-buttons {
+      justify-content: center;
+    }
+  }
+}
+
+// W pliku DashboardTabs.scss
+.league-selector {
+  .MuiFormControl-root {
+    .MuiInputLabel-root {
+      color: var(--color-text) !important;
+    }
+    
+    .MuiOutlinedInput-root {
+      color: var(--color-text) !important;
+      
+      .MuiOutlinedInput-notchedOutline {
+        border-color: var(--color-border) !important;
+      }
+      
+      &:hover .MuiOutlinedInput-notchedOutline {
+        border-color: var(--color-text) !important;
+      }
+      
+      &.Mui-focused .MuiOutlinedInput-notchedOutline {
+        border-color: var(--color-primary) !important;
+      }
+      
+      .MuiSelect-icon {
+        color: var(--color-text) !important;
+      }
+    }
+  }
+}
+
+// Style dla dropdown menu
+.MuiPaper-root.MuiMenu-paper {
+  background-color: var(--color-surface) !important;
+  
+  .MuiMenuItem-root {
+    color: var(--color-text) !important;
+    
+    &:hover {
+      background-color: var(--color-primary) !important;
+      color: var(--color-on-primary) !important;
+    }
+    
+    &.Mui-selected {
+      background-color: var(--color-primary) !important;
+      color: var(--color-on-primary) !important;
+    }
   }
 }

@@ -16,19 +16,23 @@ body.light-theme {
   --color-text: #212121;
   --color-surface: #f1f1f1;
   --color-border: #ccc;
-  --color-primary: #4CAF50;
+  --color-primary: #111111;
+  --color-team-primary: #0e0e0e;
   --color-on-primary: #ffffff;
+  --pc--boxshadow: #b6b6b6;
 }
 
 body.dark-theme {
-  --color-bg: #121212;
+  --color-bg: #292929;
   --color-text: #eeeeee;
   --color-surface: #1e1e1e;
   --color-border: #444;
   --color-primary: #4CAF50;
+  --color-team-primary: #4CAF50;
   --color-on-primary: #ffffff;
   --color-elevated: #1f1f1f; 
-   --color-surface: #2b2b2b;
+  --color-surface: #2b2b2b;
+  --pc--boxshadow: #181818;
 }
 
 /* Reset i ogólne style */
@@ -41,7 +45,7 @@ body.dark-theme {
 html, body, #root {
   height: 100%;
   font-family: var(--font-main);
-  background-color: var(--color-bg);
+  //background-color: var(--color-bg);
   color: var(--color-text);
   transition: background-color var(--transition-fast), color var(--transition-fast);
 }

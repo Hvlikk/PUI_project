@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 import './TeamPage.scss';
 
@@ -52,48 +52,64 @@ const mockMatches = [
 
 const mockPlayers = [
   {
-    id: 1,
+    uuid: '1',
     name: 'R. Lewandowski',
     position: 'Forward',
     isFavorite: false,
+    isCoach: false,
   },
   {
-    id: 2,
+    uuid: '2',
     name: 'Pedri',
     position: 'Midfielder',
     isFavorite: true,
+    isCoach: false,
   },
   {
-    id: 3,
+    uuid: '3',
     name: 'Gavi',
     position: 'Midfielder',
     isFavorite: false,
+    isCoach: false,
   },
   {
-    id: 4,
+    uuid: '4',
     name: 'Ter Stegen',
     position: 'Goalkeeper',
     isFavorite: true,
+    isCoach: false,
   },
   {
-    id: 5,
+    uuid: '5',
     name: 'Araujo',
     position: 'Defender',
     isFavorite: false,
+    isCoach: false,
   },
   {
-    id: 6,
+    uuid: '6',
     name: 'F. de Jong',
     position: 'Midfielder',
     isFavorite: false,
+    isCoach: false,
+  },
+];
+
+const mockCoaches = [
+  {
+    uuid: '7',
+    name: 'Pep Guardiola',
+    isCoach: true,
   },
 ];
 
 const TeamPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [team, setTeam] = useState(null);
   const [matches, setMatches] = useState([]);
   const [players, setPlayers] = useState([]);
+  const [coaches, setCoaches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [usingMockData, setUsingMockData] = useState(false);
@@ -159,7 +175,14 @@ const TeamPage = () => {
           
           if (playersRes.ok) {
             const playersData = await playersRes.json();
-            setPlayers(playersData.squad || playersData.players || playersData || []);
+            const allMembers = playersData.squad || playersData.players || playersData || [];
+            
+            // Rozdziel zawodników i trenerów
+            const playersOnly = allMembers.filter(member => !member.isCoach);
+            const coachesOnly = allMembers.filter(member => member.isCoach);
+            
+            setPlayers(playersOnly);
+            setCoaches(coachesOnly);
           }
         } catch (playerError) {
           console.warn('Could not fetch players:', playerError);
@@ -174,6 +197,7 @@ const TeamPage = () => {
         setTeam(mockTeamData);
         setMatches(mockMatches);
         setPlayers(mockPlayers);
+        setCoaches(mockCoaches);
         setUsingMockData(true);
         setError('');
       } finally {
@@ -186,13 +210,13 @@ const TeamPage = () => {
 
   const handleToggleFavorite = async (playerId) => {
     // Znajdź zawodnika i sprawdź czy jest ulubiony
-    const player = players.find(p => p.id === playerId);
+    const player = players.find(p => p.uuid === playerId);
     if (!player) return;
 
     // Jeśli używamy danych mockowych, tylko aktualizuj lokalnie
     if (usingMockData) {
       setPlayers(prev => prev.map(p => 
-        p.id === playerId 
+        p.uuid === playerId 
           ? { ...p, isFavorite: !p.isFavorite }
           : p
       ));
@@ -203,7 +227,7 @@ const TeamPage = () => {
       const token = localStorage.getItem('token');
       const method = player.isFavorite ? 'DELETE' : 'POST';
       
-      await fetch(`http://localhost:8081/api/players/${playerId}/favorite`, {
+      const response = await fetch(`http://localhost:8081/api/players/${playerId}/favourites`, {
         method: method,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -211,15 +235,23 @@ const TeamPage = () => {
         },
       });
       
-      // Aktualizuj stan lokalnie
-      setPlayers(prev => prev.map(p => 
-        p.id === playerId 
-          ? { ...p, isFavorite: !p.isFavorite }
-          : p
-      ));
+      if (response.ok) {
+        // Aktualizuj stan lokalnie tylko po pomyślnym API call
+        setPlayers(prev => prev.map(p => 
+          p.uuid === playerId 
+            ? { ...p, isFavorite: !p.isFavorite }
+            : p
+        ));
+      } else {
+        console.error('Failed to toggle favorite:', response.status);
+      }
     } catch (err) {
       console.error('Failed to toggle favorite:', err);
     }
+  };
+
+  const handlePlayerClick = (playerId) => {
+    navigate(`/players/${playerId}`);
   };
 
   const handleImageError = () => {
@@ -337,20 +369,48 @@ const TeamPage = () => {
         </div>
       </div>
 
+      {/* Sekcja trenerów */}
+      {coaches.length > 0 && (
+        <div className="coaches-section">
+          <h2>Coaches</h2>
+          <div className="coaches-grid">
+            {coaches.map((coach) => (
+              <div key={coach.uuid} className="coach-card">
+                <div className="image-skeleton infinite"></div>
+                <div className="coach-info">
+                  <span className="coach-name">{coach.name}</span>
+                  <span className="coach-role">Coach</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="team-section">
         <h2>Team</h2>
         <div className="players-grid">
         {players.length > 0 ? (
           players.map((player) => (
-            <div key={player.id} className="player-card">
+            <div 
+              key={player.uuid} 
+              className="player-card clickable"
+              onClick={() => handlePlayerClick(player.uuid)}
+            >
               {/* Zawsze pokazuj skeleton image dla zawodników */}
               <div className="image-skeleton infinite"></div>
               <div className="player-info">
                 <span className="player-name">{player.name}</span>
+                {player.position && (
+                  <span className="player-position">{player.position}</span>
+                )}
               </div>
               <button
                 className={`favorite-star ${player.isFavorite ? 'favorited' : ''}`}
-                onClick={() => handleToggleFavorite(player.id)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Zapobiega wywołaniu handlePlayerClick
+                  handleToggleFavorite(player.uuid);
+                }}
                 title={player.isFavorite ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}
               >
                 {player.isFavorite ? '⭐' : '☆'}
