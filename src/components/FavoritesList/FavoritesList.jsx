@@ -66,8 +66,8 @@ const FavoritesList = ({ type, searchQuery }) => {
 
       const endpoint =
         type === 'teams'
-          ? 'http://localhost:8081/api/favorites/teams'
-          : 'http://localhost:8081/api/favorites/players';
+          ? 'http://localhost:8081/api/teams/favourites'
+          : 'http://localhost:8081/api/players/favourites';
 
       let items = [];
 

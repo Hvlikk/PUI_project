@@ -66,7 +66,7 @@ const toggleFavorite = async (playerId, currentlyFavorite) => {
     
     // Fixed URL pattern to match backend
     const url = currentlyFavorite 
-      ? `http://localhost:8081/api/players/favourites/players/${playerId}`  // DELETE - matches backend
+      ? `http://localhost:8081/api/players/${playerId}/favourites`  // DELETE - matches backend
       : `http://localhost:8081/api/players/${playerId}/favourites`;        // POST - now matches backend
     
     const method = currentlyFavorite ? 'DELETE' : 'POST';

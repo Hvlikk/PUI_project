@@ -43,7 +43,7 @@ const Login = () => {
       const data = await res.json();
 
       if (res.ok) {
-        login(data.jwtToken, data.username);
+        login(data.jwtToken, data.userUuid, data.username);
         navigate('/dashboard');
       } else {
         setError(data.message || 'Invalid login credentials');

@@ -1,10 +1,9 @@
-// SettingsPage.jsx
 import React, { useEffect, useState } from 'react';
 import './SettingsPage.scss';
 import { useTheme } from '../../ThemeContext';
 
 const SettingsPage = () => {
-  const [interfaceMode, setInterfaceMode] = useState('Light');
+  const [interfaceMode, setInterfaceMode] = useState('LIGHT');
   const [upcomingNotifications, setUpcomingNotifications] = useState(true);
   const [favoriteNotifications, setFavoriteNotifications] = useState(false);
   const [username, setUsername] = useState('User');
@@ -13,11 +12,12 @@ const SettingsPage = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const { isDarkTheme, toggleTheme } = useTheme();
+  const { isDarkTheme, toggleTheme, setThemeMode } = useTheme();
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
-    const storedUserId = localStorage.getItem('userId');
+    const storedUserId = localStorage.getItem('userUuid');
+
     if (storedUsername) setUsername(storedUsername);
     if (storedUserId) {
       setUserId(storedUserId);
@@ -29,24 +29,30 @@ const SettingsPage = () => {
   }, []);
 
   const loadPreferencesFromStorage = () => {
-    const savedInterfaceMode = localStorage.getItem('interfaceMode');
-    const savedUpcomingNotifications = localStorage.getItem('upcomingNotifications');
-    const savedFavoriteNotifications = localStorage.getItem('favoriteNotifications');
-    if (savedInterfaceMode) setInterfaceMode(savedInterfaceMode);
-    if (savedUpcomingNotifications !== null) setUpcomingNotifications(savedUpcomingNotifications === 'true');
-    if (savedFavoriteNotifications !== null) setFavoriteNotifications(savedFavoriteNotifications === 'true');
+    const savedInterfaceMode = localStorage.getItem('interfaceMode') || 'LIGHT';
+    const savedUpcoming = localStorage.getItem('upcomingNotifications');
+    const savedFavorite = localStorage.getItem('favoriteNotifications');
+
+    setInterfaceMode(savedInterfaceMode);
+    if (savedUpcoming !== null) setUpcomingNotifications(savedUpcoming === 'true');
+    if (savedFavorite !== null) setFavoriteNotifications(savedFavorite === 'true');
+
+    // Synchronizuj motyw z ThemeContext
+    if (setThemeMode) {
+      setThemeMode(savedInterfaceMode);
+    }
   };
 
-  const savePreferencesToStorage = (newInterfaceMode, newUpcomingNotifications, newFavoriteNotifications) => {
-    localStorage.setItem('interfaceMode', newInterfaceMode);
-    localStorage.setItem('upcomingNotifications', newUpcomingNotifications.toString());
-    localStorage.setItem('favoriteNotifications', newFavoriteNotifications.toString());
+  const savePreferencesToStorage = (mode, upcoming, favorite) => {
+    localStorage.setItem('interfaceMode', mode);
+    localStorage.setItem('upcomingNotifications', upcoming.toString());
+    localStorage.setItem('favoriteNotifications', favorite.toString());
   };
 
-  const fetchPreferences = async (userIdParam) => {
+  const fetchPreferences = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:8081/api/preferences/preferences/${userIdParam}`, {
+      const res = await fetch(`http://localhost:8081/api/preferences/preferences/${id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -54,21 +60,27 @@ const SettingsPage = () => {
         },
       });
 
-      if (!res.ok) throw new Error(`API returned status ${res.status}`);
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
       const data = await res.json();
 
-      const newInterfaceMode = data.interfaceMode || 'Light';
-      const newUpcomingNotifications = data.upcomingNotifications ?? true;
-      const newFavoriteNotifications = data.favoriteNotifications ?? false;
+      // Mapuj wartości z API na format używany w aplikacji
+      const mode = data.interfaceMode || data.uiModePreference || 'LIGHT';
+      const upcoming = data.upcomingNotifications ?? data.upcomingMatchesNotifications ?? true;
+      const favorite = data.favoriteNotifications ?? data.favMatchStartNotifications ?? false;
 
-      setInterfaceMode(newInterfaceMode);
-      setUpcomingNotifications(newUpcomingNotifications);
-      setFavoriteNotifications(newFavoriteNotifications);
+      setInterfaceMode(mode);
+      setUpcomingNotifications(upcoming);
+      setFavoriteNotifications(favorite);
 
-      savePreferencesToStorage(newInterfaceMode, newUpcomingNotifications, newFavoriteNotifications);
+      // Synchronizuj motyw z ThemeContext
+      if (setThemeMode) {
+        setThemeMode(mode);
+      }
+
+      savePreferencesToStorage(mode, upcoming, favorite);
       setError('');
     } catch (err) {
-      console.error('Fetch failed:', err);
+      console.error('Error fetching preferences:', err);
       setError('Nie udało się pobrać ustawień z serwera. Używam lokalnych ustawień.');
       loadPreferencesFromStorage();
     } finally {
@@ -76,13 +88,18 @@ const SettingsPage = () => {
     }
   };
 
-  const updatePreferences = async (newInterfaceMode, newUpcomingNotifications, newFavoriteNotifications) => {
+  const updatePreferences = async (mode, upcoming, favorite) => {
     setSaving(true);
-    savePreferencesToStorage(newInterfaceMode, newUpcomingNotifications, newFavoriteNotifications);
+    
+    // Zapisz lokalnie
+    savePreferencesToStorage(mode, upcoming, favorite);
+    
+    // Synchronizuj motyw z ThemeContext
+    if (setThemeMode) {
+      setThemeMode(mode);
+    }
 
-    const shouldBeDark = newInterfaceMode === 'Dark';
-    if (shouldBeDark !== isDarkTheme) toggleTheme();
-
+    // Jeśli użytkownik jest zalogowany, wyślij na serwer
     if (userId) {
       try {
         const token = localStorage.getItem('token');
@@ -93,42 +110,44 @@ const SettingsPage = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            interfaceMode: newInterfaceMode,
-            upcomingNotifications: newUpcomingNotifications,
-            favoriteNotifications: newFavoriteNotifications
+            userUUID: userId,
+            uiModePreference: mode,
+            upcomingMatchesNotifications: upcoming,
+            favMatchStartNotifications: favorite,
           }),
         });
 
-        if (!res.ok) throw new Error(`API returned status ${res.status}`);
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
         setError('');
       } catch (err) {
-        console.error('Update failed:', err);
+        console.error('Error saving preferences:', err);
         setError('Ustawienia zapisane lokalnie. Błąd synchronizacji z serwerem.');
       }
     }
+
     setSaving(false);
   };
 
-  const handleInterfaceModeChange = (e) => {
+  const handleModeChange = (e) => {
     const newMode = e.target.value;
     setInterfaceMode(newMode);
     updatePreferences(newMode, upcomingNotifications, favoriteNotifications);
   };
 
-  const handleUpcomingNotificationsToggle = () => {
-    const newValue = !upcomingNotifications;
-    setUpcomingNotifications(newValue);
-    updatePreferences(interfaceMode, newValue, favoriteNotifications);
-  };
-
-  const handleFavoriteNotificationsToggle = () => {
-    const newValue = !favoriteNotifications;
-    setFavoriteNotifications(newValue);
-    updatePreferences(interfaceMode, upcomingNotifications, newValue);
+  const handleToggle = (key) => {
+    if (key === 'upcomingNotifications') {
+      const newValue = !upcomingNotifications;
+      setUpcomingNotifications(newValue);
+      updatePreferences(interfaceMode, newValue, favoriteNotifications);
+    } else if (key === 'favoriteNotifications') {
+      const newValue = !favoriteNotifications;
+      setFavoriteNotifications(newValue);
+      updatePreferences(interfaceMode, upcomingNotifications, newValue);
+    }
   };
 
   if (loading) {
-    return <div style={{ textAlign: 'center', padding: '2rem' }}><p>Ładowanie ustawień...</p></div>;
+    return <div className="loading">Ładowanie ustawień...</div>;
   }
 
   return (
@@ -139,23 +158,25 @@ const SettingsPage = () => {
       </div>
 
       {error && (
-        <div style={{ textAlign: 'center', margin: '20px auto', padding: '10px', backgroundColor: '#fff3cd', color: '#856404', border: '1px solid #ffeaa7', borderRadius: '5px', maxWidth: '800px' }}>
+        <div className="settings-error">
           {error}
         </div>
       )}
 
       <div className="settings">
         <div className="settings-card">
-          <h2>Settings {saving && <span style={{ color: '#007bff', fontSize: '14px' }}>(Zapisywanie...)</span>}</h2>
+          <h2>
+            Settings {saving && <span className="saving-status">(Zapisywanie...)</span>}
+          </h2>
 
           <div className="setting-row">
             <div>
               <h3>Interface mode</h3>
               <p>Choose between light or dark theme for the app interface.</p>
             </div>
-            <select value={interfaceMode} onChange={handleInterfaceModeChange} disabled={saving}>
-              <option value="Light">Light</option>
-              <option value="Dark">Dark</option>
+            <select value={interfaceMode} onChange={handleModeChange} disabled={saving}>
+              <option value="LIGHT">LIGHT</option>
+              <option value="DARK">DARK</option>
             </select>
           </div>
 
@@ -164,7 +185,11 @@ const SettingsPage = () => {
               <h3>Upcoming matches notifications</h3>
               <p>Receive reminders for upcoming matches!</p>
             </div>
-            <button className={upcomingNotifications ? 'enabled' : 'disabled'} onClick={handleUpcomingNotificationsToggle} disabled={saving}>
+            <button
+              className={upcomingNotifications ? 'enabled' : 'disabled'}
+              onClick={() => handleToggle('upcomingNotifications')}
+              disabled={saving}
+            >
               {upcomingNotifications ? 'Enabled' : 'Disabled'}
             </button>
           </div>
@@ -174,7 +199,11 @@ const SettingsPage = () => {
               <h3>Favorite games notifications</h3>
               <p>Stay updated with live scores and results from your favorite matches!</p>
             </div>
-            <button className={favoriteNotifications ? 'enabled' : 'disabled'} onClick={handleFavoriteNotificationsToggle} disabled={saving}>
+            <button
+              className={favoriteNotifications ? 'enabled' : 'disabled'}
+              onClick={() => handleToggle('favoriteNotifications')}
+              disabled={saving}
+            >
               {favoriteNotifications ? 'Enabled' : 'Disabled'}
             </button>
           </div>
