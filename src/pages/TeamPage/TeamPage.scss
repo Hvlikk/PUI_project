@@ -146,6 +146,7 @@
   }
 }
 
+// Sekcja meczów - poprawiona, żeby nie nadpisywać stylów Matchcard
 .matches-section {
   margin-bottom: 40px;
   
@@ -159,47 +160,55 @@
   }
   
   .matches-container {
-    display: flex;
-    gap: 15px;
-    overflow-x: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
     padding: 10px 0;
     
-    .match-card {
-      flex-shrink: 0;
-      width: 200px;
-      height: 120px;
-      background: #e9ecef;
-      border-radius: 8px;
+    @media (max-width: 1400px) {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+  }
+  
+  .matches-loading {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    
+    .loading-placeholder {
+      height: 180px;
+      background: #f8f9fa;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      
-      &.placeholder {
-        .match-placeholder {
-          width: 100%;
-          height: 100%;
-          background: #adb5bd;
-          border-radius: 6px;
-          opacity: 0.5;
-        }
-      }
-      
-      .match-placeholder {
-        text-align: center;
-        padding: 15px;
-        
-        .match-date {
-          font-size: 12px;
-          color: #6c757d;
-          margin-bottom: 8px;
-        }
-        
-        .match-teams {
-          font-size: 14px;
-          font-weight: bold;
-          color: #2c3e50;
-        }
-      }
+      color: #6c757d;
+      font-style: italic;
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .no-matches-placeholder {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px dashed #dee2e6;
+    
+    p {
+      margin: 0;
+      font-size: 16px;
     }
   }
 }
@@ -219,7 +228,6 @@
   
   .coaches-grid {
     display: grid;
-    //grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 15px;
     margin-bottom: 20px;
     
@@ -457,7 +465,6 @@
   }
 }
 
-
 @media (max-width: 768px) {
   .team-header {
     flex-direction: column;
@@ -471,10 +478,6 @@
     .team-info .team-name {
       font-size: 32px;
     }
-  }
-  
-  .matches-container {
-    justify-content: flex-start;
   }
   
   .players-grid,
@@ -511,8 +514,7 @@
   }
 }
 
-// Competition badges styling - add this to your TeamPage.scss
-
+// Competition badges styling
 .competitions-badges {
   flex-shrink: 0;
   background: #f8f9fa;
@@ -589,7 +591,7 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        min-width: 0; // Prevents text overflow
+        min-width: 0;
         
         .badge-name {
           font-weight: 600;
@@ -725,37 +727,7 @@
   }
 }
 
-.recent-matches-section {
-  margin-bottom: 40px;
-  
-  h2 {
-    font-size: 32px;
-    font-weight: bold;
-    color: var(--color-team-primary);
-    margin: 0 0 20px 0;
-    padding-bottom: 10px;
-    border-bottom: 3px solid #e9ecef;
-  }
-  
-  .matches-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
-  }
-  
-  .no-matches {
-    text-align: center;
-    padding: 20px;
-    color: #6c757d;
-    font-style: italic;
-    grid-column: 1 / -1;
-  }
-}
-
+// Skeleton loading states dla meczów
 .match-skeleton {
   width: 100%;
   height: 180px;

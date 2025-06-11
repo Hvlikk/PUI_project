@@ -39,8 +39,8 @@ const mockMatches = [
     awayTeamName: 'FC Barcelona',
     homeTeamUuid: '3',
     awayTeamUuid: '1',
-    status: 'FINISHED',
-    fullTimeScore: { home: 1, away: 1 },
+    status: 'SCHEDULED',
+    fullTimeScore: null,
     minute: null,
     compName: 'La Liga',
     compUuid: '1'
@@ -52,8 +52,8 @@ const mockMatches = [
     awayTeamName: 'Valencia CF',
     homeTeamUuid: '1',
     awayTeamUuid: '4',
-    status: 'FINISHED',
-    fullTimeScore: { home: 2, away: 0 },
+    status: 'SCHEDULED',
+    fullTimeScore: null,
     minute: null,
     compName: 'La Liga',
     compUuid: '1'
@@ -65,9 +65,9 @@ const mockMatches = [
     awayTeamName: 'FC Barcelona',
     homeTeamUuid: '5',
     awayTeamUuid: '1',
-    status: 'FINISHED',
-    fullTimeScore: { home: 0, away: 3 },
-    minute: null,
+    status: 'LIVE',
+    fullTimeScore: { home: 0, away: 1 },
+    minute: '67',
     compName: 'La Liga',
     compUuid: '1'
   },
@@ -78,8 +78,8 @@ const mockMatches = [
     awayTeamName: 'Villarreal CF',
     homeTeamUuid: '1',
     awayTeamUuid: '6',
-    status: 'FINISHED',
-    fullTimeScore: { home: 4, away: 1 },
+    status: 'SCHEDULED',
+    fullTimeScore: null,
     minute: null,
     compName: 'La Liga',
     compUuid: '1'
@@ -114,27 +114,15 @@ const mockCompetitions = [
     emblem: 'https://crests.football-data.org/CL.png',
     type: 'CUP'
   },
-  {
-    uuid: '3',
-    name: 'La liga2',
-    code: 'PDW',
-    emblem: 'https://crests.football-data.org/PD.png',
-    type: 'LEAGUE'
-  },
-  {
-    uuid: '4',
-    name: 'La liga2',
-    code: 'PDW',
-    emblem: 'https://crests.football-data.org/PD.png',
-    type: 'LEAGUE'
-  },
-  {
-    uuid: '5',
-    name: 'La liga2',
-    code: 'PDW',
-    emblem: 'https://crests.football-data.org/PD.png',
-    type: 'LEAGUE'
-  },
+];
+
+const mockTeams = [
+  { uuid: '1', name: 'FC Barcelona', crest: 'https://logos-world.net/wp-content/uploads/2020/06/Barcelona-Logo.png' },
+  { uuid: '2', name: 'Real Madrid', crest: 'https://logos.textgiraffe.com/logos/logo-name/Real-designstyle-boots-m.png' },
+  { uuid: '3', name: 'Atletico Madrid', crest: 'https://logoeps.com/wp-content/uploads/2013/03/atletico-madrid-vector-logo.png' },
+  { uuid: '4', name: 'Valencia CF', crest: 'https://logos-world.net/wp-content/uploads/2020/06/Valencia-Logo.png' },
+  { uuid: '5', name: 'Sevilla FC', crest: 'https://logos-world.net/wp-content/uploads/2020/06/Sevilla-Logo.png' },
+  { uuid: '6', name: 'Villarreal CF', crest: 'https://logos-world.net/wp-content/uploads/2020/06/Villarreal-Logo.png' },
 ];
 
 const TeamPage = () => {
@@ -145,12 +133,13 @@ const TeamPage = () => {
   const [players, setPlayers] = useState([]);
   const [coaches, setCoaches] = useState([]);
   const [competitions, setCompetitions] = useState([]);
-  const [recentMatches, setRecentMatches] = useState([]);
+  const [teams, setTeams] = useState([]); // For team crests in Matchcard
   const [loading, setLoading] = useState(true);
-  const [recentMatchesLoading, setRecentMatchesLoading] = useState(true);
+  const [matchesLoading, setMatchesLoading] = useState(true);
   const [error, setError] = useState('');
   const [usingMockData, setUsingMockData] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [favouriteMatches, setFavouriteMatches] = useState(new Set());
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -189,6 +178,27 @@ const TeamPage = () => {
           imageUrl: teamData.crest || teamData.imageUrl || null,
         });
 
+        // Fetch all teams for crests
+        const fetchTeams = async () => {
+          try {
+            const teamsRes = await fetch(`http://localhost:8081/api/teams`, {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+            
+            if (teamsRes.ok) {
+              const teamsData = await teamsRes.json();
+              setTeams(teamsData || []);
+            }
+          } catch (teamsError) {
+            console.warn('Could not fetch teams:', teamsError);
+            setTeams(mockTeams);
+          }
+        };
+
         // Fetch competitions
         const fetchCompetitions = async () => {
           try {
@@ -202,32 +212,11 @@ const TeamPage = () => {
             
             if (competitionsRes.ok) {
               const competitionsData = await competitionsRes.json();
-              setCompetitions(competitionsData.competitions || competitionsData || []);
+              setCompetitions(competitionsData || []);
             }
           } catch (competitionError) {
             console.warn('Could not fetch competitions:', competitionError);
-            setCompetitions([]);
-          }
-        };
-
-        // Fetch team matches
-        const fetchMatches = async () => {
-          try {
-            const matchesRes = await fetch(`http://localhost:8081/api/teams/${id}/matches`, {
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            });
-            
-            if (matchesRes.ok) {
-              const matchesData = await matchesRes.json();
-              setMatches(matchesData.matches || matchesData || []);
-            }
-          } catch (matchError) {
-            console.warn('Could not fetch matches:', matchError);
-            setMatches([]);
+            setCompetitions(mockCompetitions);
           }
         };
 
@@ -244,7 +233,7 @@ const TeamPage = () => {
             
             if (playersRes.ok) {
               const playersData = await playersRes.json();
-              const allMembers = playersData.squad || playersData.players || playersData || [];
+              const allMembers = playersData || [];
               const playersOnly = allMembers.filter(member => !member.isCoach);
               const coachesOnly = allMembers.filter(member => member.isCoach);
               setPlayers(playersOnly);
@@ -252,14 +241,14 @@ const TeamPage = () => {
             }
           } catch (playerError) {
             console.warn('Could not fetch players:', playerError);
-            setPlayers([]);
-            setCoaches([]);
+            setPlayers(mockPlayers);
+            setCoaches(mockCoaches);
           }
         };
 
         await Promise.all([
+          fetchTeams(),
           fetchCompetitions(),
-          fetchMatches(),
           fetchPlayers()
         ]);
 
@@ -268,10 +257,10 @@ const TeamPage = () => {
       } catch (err) {
         console.error('Failed to fetch team data:', err);
         setTeam(mockTeamData);
-        setMatches(mockMatches);
         setPlayers(mockPlayers);
         setCoaches(mockCoaches);
         setCompetitions(mockCompetitions);
+        setTeams(mockTeams);
         setUsingMockData(true);
         setError('');
       } finally {
@@ -279,21 +268,16 @@ const TeamPage = () => {
       }
     };
 
-    const fetchRecentMatches = async () => {
-      setRecentMatchesLoading(true);
+    const fetchMatches = async () => {
+      setMatchesLoading(true);
       try {
         const token = localStorage.getItem('token');
         
-        if (usingMockData) {
-          setRecentMatches(mockMatches.slice(0, 5));
-          return;
-        }
-
         if (!token) {
           throw new Error('No authentication token found');
         }
 
-        // Fetch basic match data
+        // Fetch team matches
         const matchesRes = await fetch(`http://localhost:8081/api/teams/${id}/matches`, {
           method: 'GET',
           headers: {
@@ -304,45 +288,43 @@ const TeamPage = () => {
 
         if (matchesRes.ok) {
           const matchesData = await matchesRes.json();
-          const last5Matches = (matchesData.matches || matchesData).slice(0, 5);
-
-          // Fetch detailed data for each match
-          const detailedMatches = await Promise.all(
-            last5Matches.map(async (match) => {
-              try {
-                const matchDetailsRes = await fetch(`http://localhost:8081/api/matches/${match.uuid}`, {
-                  method: 'GET',
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                  },
-                });
-                return matchDetailsRes.ok ? await matchDetailsRes.json() : null;
-              } catch (e) {
-                console.error(`Failed to fetch match ${match.uuid}:`, e);
-                return null;
-              }
-            })
-          );
-
-          setRecentMatches(detailedMatches.filter(match => match !== null));
+          setMatches(matchesData || []);
         } else {
           throw new Error('Failed to fetch matches');
         }
+
+        // Fetch favourite matches
+        const favouritesRes = await fetch(`http://localhost:8081/api/matches/favourites`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (favouritesRes.ok) {
+          const favouritesData = await favouritesRes.json();
+          setFavouriteMatches(new Set(favouritesData.map(match => match.uuid)));
+        }
+
+        setError('');
+        setUsingMockData(false);
       } catch (err) {
-        console.error('Failed to fetch recent matches:', err);
-        setRecentMatches(mockMatches.slice(0, 5));
+        console.error('Failed to fetch matches:', err);
+        setMatches(mockMatches);
+        setUsingMockData(true);
+        setError('');
       } finally {
-        setRecentMatchesLoading(false);
+        setMatchesLoading(false);
       }
     };
 
     if (id) {
-      fetchTeamData().then(() => fetchRecentMatches());
+      fetchTeamData().then(() => fetchMatches());
     } else {
       setError('No team ID provided');
       setLoading(false);
-      setRecentMatchesLoading(false);
+      setMatchesLoading(false);
     }
   }, [id]);
 
@@ -387,6 +369,53 @@ const TeamPage = () => {
     }
   };
 
+  const handleMatchFavouriteToggle = async (matchId, isFavourite) => {
+    if (usingMockData) {
+      // Update mock favourite state
+      setFavouriteMatches(prev => {
+        const newSet = new Set(prev);
+        if (isFavourite) {
+          newSet.delete(matchId);
+        } else {
+          newSet.add(matchId);
+        }
+        return newSet;
+      });
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No authentication token found');
+        return;
+      }
+
+      const method = isFavourite ? 'DELETE' : 'POST';
+      const response = await fetch(`http://localhost:8081/api/matches/${matchId}/favourites`, {
+        method: method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (response.ok) {
+        setFavouriteMatches(prev => {
+          const newSet = new Set(prev);
+          if (isFavourite) {
+            newSet.delete(matchId);
+          } else {
+            newSet.add(matchId);
+          }
+          return newSet;
+        });
+      }
+    } catch (err) {
+      console.error('Failed to toggle match favourite:', err);
+    }
+  };
+
   const handlePlayerClick = (playerId) => {
     navigate(`/players/${playerId}`);
   };
@@ -397,18 +426,6 @@ const TeamPage = () => {
 
   const handleImageError = () => {
     setImageError(true);
-  };
-
-  const formatDate = (dateString) => {
-    try {
-      return new Date(dateString).toLocaleDateString('pl-PL', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      });
-    } catch (error) {
-      return 'TBD';
-    }
   };
 
   if (loading) return <div className="loading">Ładowanie...</div>;
@@ -535,31 +552,30 @@ const TeamPage = () => {
 
       <div className="matches-section">
         <h2>Upcoming Matches</h2>
-        <div className="matches-container">
-          {matches.length > 0 ? (
-            matches.slice(0, 5).map((match, index) => (
-              <div key={match.uuid || index} className="match-card">
-                <div className="match-content">
-                  <div className="match-date">
-                    {match.utcDate ? formatDate(match.utcDate) : 'TBD'}
-                  </div>
-                  <div className="match-teams">
-                    {match.homeTeam?.name || 'Home'} vs {match.awayTeam?.name || 'Away'}
-                  </div>
-                </div>
+        {matchesLoading ? (
+          <div className="matches-loading">
+            <div className="loading-placeholder">Loading matches...</div>
+          </div>
+        ) : (
+          <div className="matches-container">
+            {matches.length > 0 ? (
+              matches.slice(0, 5).map((match) => (
+                <Matchcard
+                  key={match.uuid}
+                  match={match}
+                  teams={teams}
+                  competitions={competitions}
+                  isFavourite={favouriteMatches.has(match.uuid)}
+                  onFavouriteToggle={handleMatchFavouriteToggle}
+                />
+              ))
+            ) : (
+              <div className="no-matches-placeholder">
+                <p>No upcoming matches found</p>
               </div>
-            ))
-          ) : (
-            Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className="match-card placeholder">
-                <div className="match-placeholder">
-                  <div className="placeholder-line"></div>
-                  <div className="placeholder-line short"></div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       {coaches.length > 0 && (
