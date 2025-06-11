@@ -28,12 +28,47 @@ const DashboardTabs = () => {
       try {
         const token = localStorage.getItem('token');
         
-        // Pobierz mecze, drużyny i rozgrywki (mockowane API)
-        const matchesData = await fetch('/api/matches').then(res => res.json()).catch(() => ({ matches: [] }));
-        const teamsData = await fetch('/api/teams').then(res => res.json()).catch(() => ({ teams: [] }));
-        const competitionsData = await fetch('/api/competitions').then(res => res.json()).catch(() => ({ competitions: [] }));
+        // Pobierz podstawowe dane
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        };
 
-        // Pobierz ulubione z prawdziwego API
+        const [matchesRes, teamsRes, competitionsRes] = await Promise.all([
+          fetch('http://localhost:8081/api/matches', { method: 'GET', headers }).catch(() => null),
+          fetch('http://localhost:8081/api/teams', { method: 'GET', headers }).catch(() => null),
+          fetch('http://localhost:8081/api/competitions', { method: 'GET', headers }).catch(() => null),
+        ]);
+
+        
+        const rawMatchesData = await matchesRes.json();
+        const teamsData = await teamsRes.json();
+        const competitionsData = await competitionsRes.json();
+        const detailedMatchesData = await Promise.all(
+          rawMatchesData.map(async (match) => {
+            try {
+              const matchDetailsRes = await fetch(`http://localhost:8081/api/matches/${match.uuid}`, {
+                method: 'GET',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              });
+
+              if (matchDetailsRes.ok) {
+                const matchDetails = await matchDetailsRes.json();
+                return matchDetails;
+              } else {
+                return match; // fallback na podstawowy obiekt
+              }
+            } catch (error) {
+              console.error(`Error fetching match details for ${match.uuid}:`, error);
+              return match;
+            }
+          })
+        );
+
+        // Pobierz ulubione zawodniki i drużyny
         const [favouritePlayersRes, favouriteTeamsRes] = await Promise.all([
           fetch('http://localhost:8081/api/players/favourites', {
             method: 'GET',
@@ -62,32 +97,119 @@ const DashboardTabs = () => {
           favouriteTeamsData = await favouriteTeamsRes.json();
         }
 
-        // Mapuj dane z dodanymi właściwościami dla wyświetlania
-        const mappedFavouritePlayers = favouritePlayersData
-          .filter(player => !player.isCoach) // Filtruj tylko zawodników
-          .map(player => ({
-            id: player.uuid,
-            name: player.name,
-            position: 'Unknown',
-            imageUrl: fallbackPlayerImage,
-            isFavorite: true,
-            imageLoaded: false,
-          }));
+        // Pobierz szczegółowe informacje o ulubionych drużynach i ich rozgrywkach
+        const detailedFavouriteTeams = await Promise.all(
+          favouriteTeamsData.map(async (team) => {
+            try {
+              // Pobierz szczegóły drużyny
+              const teamDetailsRes = await fetch(`http://localhost:8081/api/teams/${team.uuid}`, {
+                method: 'GET',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              });
+              
+              let teamDetails = team;
+              if (teamDetailsRes.ok) {
+                teamDetails = await teamDetailsRes.json();
+              }
 
-        const mappedFavouriteTeams = favouriteTeamsData.map(team => ({
-          id: team.uuid,
-          name: team.name,
-          league: 'Unknown',
-          imageUrl: fallbackTeamImage,
-          isFavorite: true,
-          imageLoaded: false,
-        }));
+              console.log(detailedMatchesData); // tu jet UUID meczu
+              // Znajdź mecze tej drużyny aby określić w jakich rozgrywkach gra
+              const teamMatches = detailedMatchesData.filter(match => 
+                match.homeTeamUuid === team.uuid || match.awayTeamUuid === team.uuid
+              );
 
-        setMatches(matchesData.matches || []);
-        setTeams(teamsData.teams || []);
-        setCompetitions(competitionsData.competitions || []);
-        setFavouritePlayers(mappedFavouritePlayers);
-        setFavouriteTeams(mappedFavouriteTeams);
+              
+              const competitionIds = [...new Set(teamMatches.map(match => match.compUuid))];
+
+              console.log(team.name, "Competitions:", competitionIds)
+
+              return {
+                ...teamDetails,
+                uuid: team.uuid,
+                id: team.uuid,
+                competitionIds: competitionIds,
+                imageUrl: teamDetails.crest || fallbackTeamImage,
+                isFavorite: true,
+                imageLoaded: false,
+              };
+            } catch (error) {
+              console.error(`Error fetching team details for ${team.uuid}:`, error);
+              return {
+                ...team,
+                id: team.uuid,
+                competitionIds: [],
+                imageUrl: fallbackTeamImage,
+                isFavorite: true,
+                imageLoaded: false,
+              };
+            }
+          })
+        );
+
+        // Pobierz szczegółowe informacje o ulubionych zawodnikach
+        const detailedFavouritePlayers = await Promise.all(
+          favouritePlayersData
+            .filter(player => !player.isCoach)
+            .map(async (player) => {
+              try {
+                // Pobierz szczegóły zawodnika
+                const playerDetailsRes = await fetch(`http://localhost:8081/api/players/${player.uuid}`, {
+                  method: 'GET',
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                  },
+                });
+                
+                let playerDetails = player;
+                if (playerDetailsRes.ok) {
+                  playerDetails = await playerDetailsRes.json();
+                }
+
+                // Znajdź drużynę zawodnika wśród ulubionych drużyn
+                const playerTeam = detailedFavouriteTeams.find(team => 
+                  team.name === playerDetails.teamName
+                );
+
+                return {
+                  id: player.uuid,
+                  uuid: player.uuid,
+                  name: playerDetails.name || player.name,
+                  firstName: playerDetails.firstName,
+                  lastName: playerDetails.lastName,
+                  position: playerDetails.position || 'Unknown',
+                  teamName: playerDetails.teamName,
+                  teamId: playerTeam?.uuid,
+                  competitionIds: playerTeam?.competitionIds || [],
+                  imageUrl: fallbackPlayerImage,
+                  isFavorite: true,
+                  imageLoaded: false,
+                };
+              } catch (error) {
+                console.error(`Error fetching player details for ${player.uuid}:`, error);
+                return {
+                  id: player.uuid,
+                  uuid: player.uuid,
+                  name: player.name,
+                  position: 'Unknown',
+                  teamName: '',
+                  competitionIds: [],
+                  imageUrl: fallbackPlayerImage,
+                  isFavorite: true,
+                  imageLoaded: false,
+                };
+              }
+            })
+        );
+
+        setMatches(detailedMatchesData);
+        setTeams(teamsData);
+        setCompetitions(competitionsData);
+        setFavouritePlayers(detailedFavouritePlayers);
+        setFavouriteTeams(detailedFavouriteTeams);
 
         // Symulacja załadowania obrazków po 1 sekundzie
         setTimeout(() => {
@@ -97,7 +219,7 @@ const DashboardTabs = () => {
 
       } catch (err) {
         console.error('Error fetching data:', err);
-        setError('Błąd podczas pobierania danych. Spróbuj ponownie później.');
+        setError('Error loading data. Please try again later.');
       } finally {
         setIsLoading(false);
       }
@@ -105,6 +227,37 @@ const DashboardTabs = () => {
 
     fetchData();
   }, []);
+
+  // Funkcja do filtrowania zawodników po lidze
+  const filterPlayersByLeague = (playerList) => {
+    if (selectedLeague === 'all') {
+      return playerList;
+    }
+    
+    return playerList.filter(player => {
+      return player.competitionIds && player.competitionIds.includes(selectedLeague);
+    });
+  };
+
+  // Funkcja do filtrowania drużyn po lidze
+  const filterTeamsByLeague = (teamList) => {
+    if (selectedLeague === 'all') {
+      return teamList;
+    }
+    
+    return teamList.filter(team => {
+      return team.competitionIds && team.competitionIds.includes(selectedLeague);
+    });
+  };
+
+  // Funkcja do filtrowania meczów po lidze
+  const filterMatchesByLeague = (matchList) => {
+    if (selectedLeague === 'all') {
+      return matchList;
+    }
+    
+    return matchList.filter(match => match.compUuid === selectedLeague);
+  };
 
   const togglePlayerFavorite = async (playerId) => {
     try {
@@ -123,7 +276,7 @@ const DashboardTabs = () => {
       setFavouritePlayers(prev => prev.filter(p => p.id !== playerId));
     } catch (err) {
       console.error('Failed to remove from favorites:', err);
-      alert('Nie udało się usunąć z ulubionych.');
+      alert('Failed to remove from favorites.');
     }
   };
 
@@ -144,7 +297,7 @@ const DashboardTabs = () => {
       setFavouriteTeams(prev => prev.filter(t => t.id !== teamId));
     } catch (err) {
       console.error('Failed to remove from favorites:', err);
-      alert('Nie udało się usunąć z ulubionych.');
+      alert('Failed to remove from favorites.');
     }
   };
 
@@ -156,31 +309,36 @@ const DashboardTabs = () => {
     navigate(`/teams/${teamId}`);
   };
 
-  const liveMatches = matches.filter(match => match.status === 'LIVE');
+  // Filtrowanie meczów z uwzględnieniem wybranej ligi
+  const liveMatches = filterMatchesByLeague(matches.filter(match => match.status === 'LIVE'));
 
-  const favouritePlayersMatches = matches.filter(match => {
+  const favouritePlayersMatches = filterMatchesByLeague(matches.filter(match => {
     const favPlayersIds = favouritePlayers.map(p => p.id);
     return favPlayersIds.some(id =>
       (match.homeLineupPlayerIds || []).includes(id) ||
       (match.awayLineupPlayerIds || []).includes(id)
     );
-  });
+  }));
 
-  const favouriteTeamsMatches = matches.filter(match => {
-    const favTeamsIds = favouriteTeams.map(t => t.id);
-    return favTeamsIds.includes(match.homeTeamId) || favTeamsIds.includes(match.awayTeamId);
-  });
+  const favouriteTeamsMatches = filterMatchesByLeague(matches.filter(match => {
+    const favTeamsIds = favouriteTeams.map(t => t.uuid || t.id);
+    return favTeamsIds.includes(match.homeTeamUuid) || favTeamsIds.includes(match.awayTeamUuid);
+  }));
+
+  // Filtrowanie ulubionych zawodników i drużyn po lidze
+  const filteredFavouritePlayers = filterPlayersByLeague(favouritePlayers);
+  const filteredFavouriteTeams = filterTeamsByLeague(favouriteTeams);
 
   const renderNoMatchesMessage = () => (
-    <div className="no-matches">Brak meczów do wyświetlenia</div>
+    <div className="no-matches">No matches to display</div>
   );
 
   const renderNoFavouritesMessage = () => {
     if (activeTab === 'favourite-players') {
-      return <div className="no-matches">Brak meczów ulubionych zawodników</div>;
+      return <div className="no-matches">No matches with favorite players</div>;
     }
     if (activeTab === 'favourite-teams') {
-      return <div className="no-matches">Brak meczów ulubionych drużyn</div>;
+      return <div className="no-matches">No matches with favorite teams</div>;
     }
     return renderNoMatchesMessage();
   };
@@ -191,7 +349,7 @@ const DashboardTabs = () => {
         {matchList.length > 0
           ? matchList.map((match) => (
               <Matchcard
-                key={match.id}
+                key={match.uuid || match.id}
                 match={match}
                 teams={teams}
                 competitions={competitions}
@@ -205,12 +363,15 @@ const DashboardTabs = () => {
   const renderFavouritePlayers = () => (
     <div className="tab-wrapper">
       <div className="favourites-grid players-grid">
-        {favouritePlayers.length === 0 ? (
+        {filteredFavouritePlayers.length === 0 ? (
           <p className="no-results">
-            Brak ulubionych zawodników. Dodaj zawodników do ulubionych w sekcji Zawodnicy.
+            {selectedLeague === 'all' 
+              ? "No favorite players. Add players to favorites in the Players section."
+              : "No favorite players in selected league."
+            }
           </p>
         ) : (
-          favouritePlayers.map(player => (
+          filteredFavouritePlayers.map(player => (
             <div
               key={player.id}
               className="player-item"
@@ -224,7 +385,9 @@ const DashboardTabs = () => {
                   style={{ display: player.imageLoaded ? 'block' : 'none' }}
                 />
               </div>
-              <span className="player-name">{player.name}</span>
+              <div className="player-info">
+                <span className="player-name">{player.name}</span>
+              </div>
               <button
                 className="favorite-star favorited"
                 onClick={(e) => {
@@ -244,16 +407,19 @@ const DashboardTabs = () => {
   const renderFavouriteTeams = () => (
     <div className="tab-wrapper">
       <div className="favourites-grid teams-grid">
-        {favouriteTeams.length === 0 ? (
+        {filteredFavouriteTeams.length === 0 ? (
           <p className="no-results">
-            Brak ulubionych drużyn. Dodaj drużyny do ulubionych w sekcji Drużyny.
+            {selectedLeague === 'all' 
+              ? "No favorite teams. Add teams to favorites in the Teams section."
+              : "No favorite teams in selected league."
+            }
           </p>
         ) : (
-          favouriteTeams.map(team => (
+          filteredFavouriteTeams.map(team => (
             <div
-              key={team.id}
+              key={team.uuid || team.id}
               className="team-item"
-              onClick={() => handleTeamClick(team.id)}
+              onClick={() => handleTeamClick(team.uuid || team.id)}
             >
               <div className="team-avatar">
                 <div className="image-skeleton infinite" />
@@ -268,7 +434,7 @@ const DashboardTabs = () => {
                 className="favorite-star favorited"
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleTeamFavorite(team.id);
+                  toggleTeamFavorite(team.uuid || team.id);
                 }}
               >
                 ⭐
@@ -295,16 +461,12 @@ const DashboardTabs = () => {
             >
               <MenuItem value="all">All Leagues</MenuItem>
               {competitions.map((league) => (
-                <MenuItem key={league.id} value={league.id}>
+                <MenuItem key={league.uuid || league.id} value={league.uuid || league.id}>
                   {league.name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-        </div>
-        <div className="league-buttons">
-          <button onClick={() => navigate(`/standings/${selectedLeague}`)}>Standings</button>
-          <button onClick={() => navigate(`/statistics/${selectedLeague}`)}>Statistics</button>
         </div>
       </div>
 
@@ -330,7 +492,7 @@ const DashboardTabs = () => {
       </div>
 
       <div className="tab-content">
-        {isLoading && <div className="loading">Ładowanie danych...</div>}
+        {isLoading && <div className="loading">Loading data...</div>}
         {error && <div className="error">{error}</div>}
 
         {!isLoading && activeTab === 'live' && renderMatchList(liveMatches)}

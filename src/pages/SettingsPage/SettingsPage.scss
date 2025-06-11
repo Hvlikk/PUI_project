@@ -19,6 +19,7 @@
   display: flex;
   justify-content: center;
   padding: 0 20px;
+  color: var(--text-color-settings);
 }
 
 .settings-card {
@@ -80,4 +81,9 @@
   .setting-row:last-child {
     border-bottom: none;
   }
+}
+
+
+* {
+  --text-color-settings: #000000;
 }

@@ -46,6 +46,7 @@
       position: relative;
       width: 100%;
       max-width: 720px;
+      margin-top: 7vh;
       padding: 1.5rem 2rem;
       justify-content: flex-start;
       align-items: flex-start;
@@ -69,7 +70,7 @@
   }
 }
 
-/* ✅ Responsywność */
+/*  Responsywność */
 @media (max-width: 768px) {
   .content-wrapper {
     padding: 24px;
